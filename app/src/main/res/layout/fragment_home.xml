@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.screens.home.HomeFragment">
+
+    <!-- TEXT APP NAME -->
+    <TextView
+        android:id="@+id/tv_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/app_name"
+        android:textColor="@color/green"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- BUTTON SETTINGS -->
+    <ImageView
+        android:id="@+id/btn_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/settings"
+        app:layout_constraintBottom_toBottomOf="@id/tv_app_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_app_name"
+        app:srcCompat="@drawable/ic_settings_outline_24_primary" />
+
+    <!-- BUTTON HISTORY -->
+    <ImageView
+        android:id="@+id/btn_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/history"
+        app:layout_constraintBottom_toBottomOf="@id/tv_app_name"
+        app:layout_constraintEnd_toStartOf="@id/btn_settings"
+        app:layout_constraintTop_toTopOf="@id/tv_app_name"
+        app:srcCompat="@drawable/ic_history_outline_24_primary" />
+
+    <!-- HOME BANNER -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/card_banner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:background="@drawable/custom_card_rounded_filled_primary"
+        app:layout_constraintTop_toBottomOf="@id/tv_app_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- TEXT GREETINGS NAME -->
+        <TextView
+            android:id="@+id/tv_greetings_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/dummy_greetings_name" />
+
+        <!-- TEXT IDENTIFY WASTE-->
+        <TextView
+            android:id="@+id/tv_greetings_msg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/msg_identify_waste"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_greetings_name" />
+
+        <!-- CARD USER'S STATS -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/card_statistics"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="16dp"
+            android:background="@drawable/custom_card_rounded_filled_white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_greetings_msg">
+
+            <!-- TEXT USER'S IDENTIFIED WASTE-->
+            <TextView
+                android:id="@+id/tv_waste_identified"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="@color/green"
+                android:text="@string/dummy_total_waste_identified"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/divider_vertical"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- VERTICAL DIVIDER -->
+            <View
+                android:id="@+id/divider_vertical"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/gray_light"
+                app:layout_constraintStart_toEndOf="@id/tv_waste_identified"
+                app:layout_constraintEnd_toStartOf="@id/tv_categories_found"
+                app:layout_constraintTop_toTopOf="@id/tv_waste_identified"
+                app:layout_constraintBottom_toBottomOf="@id/tv_title_waste_identified" />
+
+            <!-- TEXT USER'S FOUNDED CATEGORIES -->
+            <TextView
+                android:id="@+id/tv_categories_found"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="@color/green"
+                android:text="@string/dummy_total_categories_found"
+                app:layout_constraintStart_toEndOf="@id/divider_vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- TEXT TITLE IDENTIFIED WASTE -->
+            <TextView
+                android:id="@+id/tv_title_waste_identified"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/waste_identified"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@id/tv_waste_identified"
+                app:layout_constraintEnd_toEndOf="@id/tv_waste_identified"
+                app:layout_constraintTop_toBottomOf="@id/tv_waste_identified" />
+
+            <!-- TEXT TITLE IDENTIFIED WASTE -->
+            <TextView
+                android:id="@+id/tv_title_categories_found"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/categories_found"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@id/tv_categories_found"
+                app:layout_constraintEnd_toEndOf="@id/tv_categories_found"
+                app:layout_constraintTop_toBottomOf="@id/tv_categories_found" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- TEXT TITLE WASTE CATEGORIES -->
+    <TextView
+        android:id="@+id/tv_title_waste_categories"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/waste_categories"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_banner" />
+
+    <!-- RECYCLERVIEW WASTE CATEGORIES -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_categories"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title_waste_categories"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/rv_categories"
+        app:layout_constraintEnd_toEndOf="@id/rv_categories"
+        app:layout_constraintTop_toTopOf="@id/rv_categories"
+        app:layout_constraintBottom_toBottomOf="@id/rv_categories" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

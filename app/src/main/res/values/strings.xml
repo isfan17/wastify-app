@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Wastify</string>
+
+    <string name="menu_title_home">Home</string>
+    <string name="menu_title_explore">Explore</string>
+
+    <string name="full_name">Full Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="edit">Edit</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_language">Change Language</string>
+    <string name="app_guide">App Guide</string>
+    <string name="faqs">FAQs</string>
+    <string name="logout">Logout</string>
+    <string name="waste_categories">Waste Categories</string>
+    <string name="settings">Settings</string>
+    <string name="history">History</string>
+    <string name="identify">Identify</string>
+    <string name="next">Next</string>
+    <string name="capture_and_identify">Capture and Identify</string>
+    <string name="previous">Previous</string>
+    <string name="learn_and_take_action">Learn and Take Action</string>
+    <string name="get_started">Get Started</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="back">Back</string>
+    <string name="category">Category</string>
+    <string name="category_details">Category Details</string>
+    <string name="waste_category">Waste Category</string>
+    <string name="description">Description</string>
+    <string name="waste_identified">Waste Identified</string>
+    <string name="categories_found">Categories Found</string>
+    <string name="welcome_to_wastify">Welcome to Wastify</string>
+
+    <string name="msg_fill_register_data">Please create an account before you start.</string>
+    <string name="msg_fill_login_data">Please log in with the account you have registered.</string>
+    <string name="msg_have_account">Already have an account?</string>
+    <string name="msg_have_no_account">Don\'t have an account?</string>
+    <string name="msg_field_required">This field is required</string>
+    <string name="msg_login_success">Login Successful</string>
+    <string name="msg_passwords_not_match">Passwords do not match</string>
+    <string name="msg_input_valid_email">Please input a valid email address</string>
+    <string name="msg_register_success">Account Has Been Created Successfully</string>
+    <string name="msg_identify_waste">Let\'s identify your waste!</string>
+    <string name="msg_first_on_boarding">Start your waste management journey with Wastify, the app that helps you identify and manage different types of waste through image recognition.</string>
+    <string name="msg_second_on_boarding">Simply snap a picture of any waste item, and our image recognition technology will identify its type.</string>
+    <string name="msg_third_on_boarding">Dive into our comprehensive waste category database to learn more about various waste types, their environmental impact, and how to dispose of them properly.</string>
+    <string name="msg_logout">Are you sure want to log out of this account?</string>
+    <string name="msg_loading">Please wait…</string>
+
+    <string name="value_full_name">Hello, %s</string>
+
+    <string name="dummy_greetings_name">Hello, Alexander Jamal</string>
+    <string name="dummy_total_waste_identified">0</string>
+    <string name="dummy_total_categories_found">0/12</string>
+    <string name="dummy_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "404851645835",
+    "project_id": "wastify-c23-pc651",
+    "storage_bucket": "wastify-c23-pc651.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404851645835:android:7d7ab9674e8e690a27638e",
+        "android_client_info": {
+          "package_name": "com.bangkit.wastify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404851645835-hj03881k0cnirm2pdn3r9lks9mvn8qu7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bangkit.wastify",
+            "certificate_hash": "2e16a1ed75614a8167d5fe6fef4a3b0765ad78e4"
+          }
+        },
+        {
+          "client_id": "404851645835-81m4s54vt7ko0de09vvcfcv8ns7maaj0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgiBWktxWgtLsgmMtvgmXUlIJHQeDurX0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404851645835-81m4s54vt7ko0de09vvcfcv8ns7maaj0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
