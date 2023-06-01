@@ -78,6 +78,11 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // Move to history page
+        binding.btnHistory.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_historyFragment)
+        }
+
         // Move to settings page
         binding.btnSettings.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
