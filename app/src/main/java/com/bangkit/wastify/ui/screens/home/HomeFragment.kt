@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bangkit.wastify.R
 import com.bangkit.wastify.databinding.FragmentHomeBinding
 import com.bangkit.wastify.ui.adapters.CategoryGridAdapter
-import com.bangkit.wastify.ui.adapters.CategoryGridSpacing
+import com.bangkit.wastify.utils.CategoryGridSpacing
 import com.bangkit.wastify.ui.viewmodels.AuthViewModel
 import com.bangkit.wastify.ui.viewmodels.WasteViewModel
 import com.bangkit.wastify.utils.Helper.toast

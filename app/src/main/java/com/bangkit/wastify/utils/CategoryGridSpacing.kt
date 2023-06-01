@@ -1,4 +1,4 @@
-package com.bangkit.wastify.ui.adapters
+package com.bangkit.wastify.utils
 
 import android.content.Context
 import android.graphics.Rect
