@@ -7,30 +7,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bangkit.wastify.data.model.Category
-import com.bangkit.wastify.databinding.FragmentCategoryDetailBinding
+import com.bangkit.wastify.R
+import com.bangkit.wastify.data.model.Article
+import com.bangkit.wastify.databinding.FragmentArticleDetailBinding
 
-class CategoryDetailFragment : Fragment() {
+class ArticleDetailFragment : Fragment() {
 
-    private var _binding: FragmentCategoryDetailBinding? = null
+    private var _binding: FragmentArticleDetailBinding? = null
     private val binding get() = _binding!!
 
-    private val navArgs: CategoryDetailFragmentArgs by navArgs()
+    private val navArgs: ArticleDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCategoryDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentArticleDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val objCategory = navArgs.category
-        bind(objCategory)
+        val objArticle = navArgs.article
+        bind(objArticle)
 
         // Handle back btn
         binding.btnBack.setOnClickListener {
@@ -38,10 +39,12 @@ class CategoryDetailFragment : Fragment() {
         }
     }
 
-    private fun bind(category: Category) {
-        binding.ivWaste.setImageResource(category.image)
-        binding.tvCategoryName.text = category.name
-        binding.tvCategoryDescription.text = category.description
+    private fun bind(article: Article) {
+        binding.ivWaste.setImageResource(article.image)
+        binding.tvArticleTitle.text = article.title
+        binding.tvArticleSource.text = article.source
+        binding.tvArticlePublishedAt.text = article.publishedAt
+        binding.tvArticleDescription.text = article.description
     }
 
     override fun onDestroyView() {

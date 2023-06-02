@@ -109,6 +109,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_homeFragment_to_articleDetailFragment"
+            app:destination="@id/articleDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -133,6 +140,7 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+
     <fragment
         android:id="@+id/onBoardingContainerFragment"
         android:name="com.bangkit.wastify.ui.screens.onboarding.OnBoardingContainerFragment"
@@ -149,6 +157,7 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+
     <fragment
         android:id="@+id/categoryDetailFragment"
         android:name="com.bangkit.wastify.ui.screens.home.CategoryDetailFragment"
@@ -158,9 +167,20 @@
             android:name="category"
             app:argType="com.bangkit.wastify.data.model.Category" />
     </fragment>
+
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.bangkit.wastify.ui.screens.history.HistoryFragment"
         android:label="fragment_history"
         tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/articleDetailFragment"
+        android:name="com.bangkit.wastify.ui.screens.home.ArticleDetailFragment"
+        android:label="fragment_article_detail"
+        tools:layout="@layout/fragment_article_detail">
+        <argument
+            android:name="article"
+            app:argType="com.bangkit.wastify.data.model.Article" />
+    </fragment>
 </navigation>

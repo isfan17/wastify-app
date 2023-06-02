@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screens.home.CategoryDetailFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.screens.home.ArticleDetailFragment">
 
     <ImageView
         android:id="@+id/btn_back"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="@string/category_detail"
+        android:text="@string/article_detail"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -45,7 +45,7 @@
         android:layout_height="156dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:contentDescription="@string/waste_category"
+        android:contentDescription="@string/article_image"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,42 +53,55 @@
         tools:src="@tools:sample/backgrounds/scenic"/>
 
     <TextView
-        android:id="@+id/tv_category_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:paddingVertical="8dp"
-        android:paddingHorizontal="12dp"
-        android:background="@drawable/custom_card_rounded_filled_primary"
-        android:text="@string/category"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_waste" />
-
-    <TextView
-        android:id="@+id/tv_title_description"
+        android:id="@+id/tv_article_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginHorizontal="16dp"
-        android:text="@string/description"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_category_name" />
+        app:layout_constraintTop_toBottomOf="@id/iv_waste"
+        tools:text="@string/dummy_article_title" />
 
     <TextView
-        android:id="@+id/tv_category_description"
-        android:layout_width="0dp"
+        android:id="@+id/tv_article_source"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/tv_title_description"
-        app:layout_constraintEnd_toEndOf="@id/tv_title_description"
-        app:layout_constraintTop_toBottomOf="@id/tv_title_description"
-        tools:text="@string/dummy_description"/>
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:paddingVertical="4dp"
+        android:paddingHorizontal="6dp"
+        android:background="@drawable/custom_card_rounded_filled_primary"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_article_title"
+        tools:text="@string/dummy_article_source" />
+
+    <TextView
+        android:id="@+id/tv_article_published_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textSize="12sp"
+        app:layout_constraintTop_toTopOf="@id/tv_article_source"
+        app:layout_constraintBottom_toBottomOf="@id/tv_article_source"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@string/dummy_article_date"/>
+
+    <TextView
+        android:id="@+id/tv_article_description"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/tv_article_source"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="@string/dummy_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

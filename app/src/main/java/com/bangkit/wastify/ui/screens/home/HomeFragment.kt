@@ -11,8 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.wastify.R
 import com.bangkit.wastify.databinding.FragmentHomeBinding
+import com.bangkit.wastify.ui.adapters.ArticleCardAdapter
 import com.bangkit.wastify.ui.adapters.CategoryGridAdapter
 import com.bangkit.wastify.utils.CategoryGridSpacing
 import com.bangkit.wastify.ui.viewmodels.AuthViewModel
@@ -40,6 +42,15 @@ class HomeFragment : Fragment() {
         )
     }
 
+    private val articlesAdapter by lazy {
+        ArticleCardAdapter(
+            onItemClicked = {
+                val action = HomeFragmentDirections.actionHomeFragmentToArticleDetailFragment(it)
+                findNavController().navigate(action)
+            }
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,24 +64,50 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.tvGreetingsName.text = getString(R.string.value_full_name, authViewModel.currentUser?.displayName)
 
-        // Category recyclerview setup
+        // Recyclerview setup
         setupCategoriesRecyclerView()
+        setupArticlesRecyclerView()
 
-        // Retrieve categories data
+        // Retrieve categories and articles data
         wasteViewModel.getCategories()
+        wasteViewModel.getArticles()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                wasteViewModel.categoriesFlow.collect { state ->
-                    if (state != null) {
-                        when (state) {
-                            UiState.Loading -> showCategoryLoading(true)
-                            is UiState.Failure -> {
-                                showCategoryLoading(false)
-                                toast(state.error.toString())
+
+                // Categories
+                launch {
+                    wasteViewModel.categoriesFlow.collect { categoriesState ->
+                        if (categoriesState != null) {
+                            when (categoriesState) {
+                                UiState.Loading -> showCategoryLoading(true)
+                                is UiState.Failure -> {
+                                    showCategoryLoading(false)
+                                    toast(categoriesState.error.toString())
+                                }
+                                is UiState.Success -> {
+                                    showCategoryLoading(false)
+                                    categoriesAdapter.submitList(categoriesState.data)
+                                }
                             }
-                            is UiState.Success -> {
-                                showCategoryLoading(false)
-                                categoriesAdapter.submitList(state.data)
+                        }
+                    }
+                }
+
+                // Articles
+                launch {
+                    wasteViewModel.articlesFlow.collect { articlesState ->
+                        if (articlesState != null) {
+                            when (articlesState) {
+                                UiState.Loading -> showArticlesLoading(true)
+                                is UiState.Failure -> {
+                                    showArticlesLoading(false)
+                                    toast(articlesState.error.toString())
+                                }
+                                is UiState.Success -> {
+                                    showArticlesLoading(false)
+                                    articlesAdapter.submitList(articlesState.data)
+                                }
                             }
                         }
                     }
@@ -89,15 +126,24 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun showCategoryLoading(state: Boolean) {
-        binding.progressBarCategory.visibility = if (state) View.VISIBLE else View.GONE
-    }
-
     private fun setupCategoriesRecyclerView() {
         val itemDecoration = CategoryGridSpacing(requireContext(), R.dimen.category_item_offset)
         binding.rvCategories.layoutManager = GridLayoutManager(requireContext(), 4)
         binding.rvCategories.addItemDecoration(itemDecoration)
         binding.rvCategories.adapter = categoriesAdapter
+    }
+
+    private fun setupArticlesRecyclerView() {
+        binding.rvArticles.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvArticles.adapter = articlesAdapter
+    }
+
+    private fun showCategoryLoading(state: Boolean) {
+        binding.progressBarCategory.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
+    private fun showArticlesLoading(state: Boolean) {
+        binding.progressBarArticles.visibility = if (state) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {
