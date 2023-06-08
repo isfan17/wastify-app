@@ -38,7 +38,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val loadingDialog = LoadingDialog(requireActivity())
+        val loadingDialog = LoadingDialog(this)
 
         // Validating login result
         viewLifecycleOwner.lifecycleScope.launch {
@@ -70,6 +70,11 @@ class LoginFragment : Fragment() {
         // Move to register page
         binding.btnRegister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+
+        // Move to forgot password page
+        binding.btnForgot.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
         }
     }
 

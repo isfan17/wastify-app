@@ -25,4 +25,58 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">false</item>
     </style>
+
+    <!-- Rounded ImageView -->
+    <style name="ShapeAppearanceOverlay.App.CornerSize8dp" parent="">
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <!-- Circle ImageView -->
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- Custom Primary Button -->
+    <style name="PrimaryButton" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/PrimaryButtonThemeOverlay</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <!-- Custom Primary Outlined Button -->
+    <style name="PrimaryOutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="materialThemeOverlay">@style/OutlinedButtonThemeOverlay</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <!-- Custom Error Button -->
+    <style name="ErrorButton" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/ErrorButtonThemeOverlay</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <!-- Custom Error Button Background -->
+    <style name="ErrorButtonThemeOverlay" parent="">
+        <item name="colorPrimary">@color/red_light</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+    <!-- Custom Primary Button Background -->
+    <style name="PrimaryButtonThemeOverlay" parent="">
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+    <!-- Custom Primary Outlined Button Background -->
+    <style name="OutlinedButtonThemeOverlay" parent="">
+        <item name="colorPrimary">@color/green</item>
+    </style>
 </resources>

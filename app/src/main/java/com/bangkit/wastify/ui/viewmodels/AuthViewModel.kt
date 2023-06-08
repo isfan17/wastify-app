@@ -22,6 +22,12 @@ class AuthViewModel @Inject constructor(
     private val _registerFlow = MutableStateFlow<UiState<FirebaseUser>?>(null)
     val registerFlow : StateFlow<UiState<FirebaseUser>?> = _registerFlow
 
+    private val _forgotPasswordFlow = MutableStateFlow<UiState<String>?>(null)
+    val forgotPasswordFlow : StateFlow<UiState<String>?> = _forgotPasswordFlow
+
+    private val _profileUpdatesFlow = MutableStateFlow<UiState<String>?>(null)
+    val profileUpdatesFlow : StateFlow<UiState<String>?> = _profileUpdatesFlow
+
     val currentUser: FirebaseUser?
         get() = repository.currentUser
 
@@ -41,6 +47,18 @@ class AuthViewModel @Inject constructor(
         _registerFlow.value = UiState.Loading
         val result = repository.register(name, email, password)
         _registerFlow.value = result
+    }
+
+    fun forgotPassword(email: String) = viewModelScope.launch {
+        _forgotPasswordFlow.value = UiState.Loading
+        val result = repository.forgotPassword(email)
+        _forgotPasswordFlow.value = result
+    }
+
+    fun updateProfile(name: String, email: String) = viewModelScope.launch {
+        _profileUpdatesFlow.value = UiState.Loading
+        val result = repository.updateProfile(name, email)
+        _profileUpdatesFlow.value = result
     }
 
     fun logout() {

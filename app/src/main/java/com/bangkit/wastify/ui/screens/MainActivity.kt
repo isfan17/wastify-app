@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bangkit.wastify.R
@@ -45,5 +46,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
+        binding.btnIdentify.setOnClickListener { navController.navigate(R.id.action_homeFragment_to_cameraFragment) }
     }
 }

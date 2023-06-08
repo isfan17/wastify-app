@@ -6,17 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ui.screens.onboarding.FirstOnBoardingFragment">
 
+    <!-- IMAGE ILLUSTRATION -->
     <ImageView
         android:id="@+id/iv_illustration"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_marginTop="80dp"
         android:contentDescription="@string/welcome_to_wastify"
-        android:src="@drawable/separate"
+        android:src="@drawable/recycle"
+        app:layout_constraintBottom_toTopOf="@id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
+    <!-- TEXT TITLE MSG -->
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="0dp"
@@ -29,31 +32,34 @@
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tv_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_illustration" />
 
+    <!-- TEXT DESCRIPTION MSG -->
     <TextView
         android:id="@+id/tv_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
         android:text="@string/msg_first_on_boarding"
         android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@id/btn_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
+    <!-- BUTTON NEXT PAGE -->
     <Button
         android:id="@+id/btn_next"
+        style="@style/PrimaryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/next"
-        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

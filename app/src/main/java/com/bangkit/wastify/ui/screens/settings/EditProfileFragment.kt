@@ -1,4 +1,4 @@
-package com.bangkit.wastify.ui.screens.auth
+package com.bangkit.wastify.ui.screens.settings
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,8 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bangkit.wastify.R
-import com.bangkit.wastify.databinding.FragmentRegisterBinding
-import com.bangkit.wastify.ui.components.LoadingDialog
+import com.bangkit.wastify.databinding.FragmentEditProfileBinding
 import com.bangkit.wastify.ui.viewmodels.AuthViewModel
 import com.bangkit.wastify.utils.Helper.isValidEmail
 import com.bangkit.wastify.utils.Helper.toast
@@ -21,9 +20,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RegisterFragment : Fragment() {
+class EditProfileFragment : Fragment() {
 
-    private var _binding: FragmentRegisterBinding? = null
+    private var _binding: FragmentEditProfileBinding? = null
     private val binding get() = _binding!!
 
     private val authViewModel: AuthViewModel by viewModels()
@@ -33,29 +32,29 @@ class RegisterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        _binding = FragmentEditProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val loadingDialog = LoadingDialog(this)
+        setUserData()
 
-        // Validating register result
+        // Validating update profile result
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.registerFlow.collect { state ->
+                authViewModel.profileUpdatesFlow.collect { state ->
                     if (state != null) {
-                        when(state) {
-                            UiState.Loading -> loadingDialog.show()
+                        when (state) {
+                            UiState.Loading -> showLoading(true)
                             is UiState.Failure -> {
-                                loadingDialog.dismiss()
+                                showLoading(false)
                                 toast(state.error.toString())
                             }
                             is UiState.Success -> {
-                                loadingDialog.dismiss()
-                                toast(getString(R.string.msg_register_success))
-                                findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
+                                showLoading(false)
+                                toast(getString(R.string.msg_profile_updated))
+                                findNavController().navigateUp()
                             }
                         }
                     }
@@ -63,40 +62,57 @@ class RegisterFragment : Fragment() {
             }
         }
 
-        // Do register process
-        binding.btnRegister.setOnClickListener {
-            register()
+        binding.btnUpdate.setOnClickListener {
+            if (dataChanged()) {
+                updateProfile()
+            } else {
+                toast(getString(R.string.msg_no_data_changed))
+            }
         }
 
-        // Move to login page
-        binding.btnLogin.setOnClickListener {
+        binding.btnForgot.setOnClickListener {
+            findNavController().navigate(R.id.action_editProfileFragment_to_forgotPasswordFragment)
+        }
+
+        binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
     }
 
-    private fun register() {
+    private fun setUserData() {
+        binding.edtFullName.setText(authViewModel.currentUser?.displayName.toString())
+        binding.edtEmail.setText(authViewModel.currentUser?.email.toString())
+    }
+
+    private fun dataChanged(): Boolean {
         val nameEntry = binding.edtFullName.text.toString()
         val emailEntry = binding.edtEmail.text.toString()
-        val passwordEntry = binding.edtPassword.text.toString()
-        val confirmPasswordEntry = binding.edtConfirmPassword.text.toString()
+        return !(nameEntry == authViewModel.currentUser?.displayName.toString()
+                && emailEntry == authViewModel.currentUser?.email.toString())
+    }
 
-        // Checking the form requirement
+    private fun updateProfile() {
+        val nameEntry = binding.edtFullName.text.toString()
+        val emailEntry = binding.edtEmail.text.toString()
+
+        // Checks form requirement
         when {
             nameEntry.isEmpty() -> binding.edtFullName.error = getString(R.string.msg_field_required)
             emailEntry.isEmpty() -> binding.edtEmail.error = getString(R.string.msg_field_required)
-            passwordEntry.isEmpty() -> binding.edtPassword.error = getString(R.string.msg_field_required)
-            confirmPasswordEntry.isEmpty() -> binding.edtConfirmPassword.error = getString(R.string.msg_field_required)
-
-            confirmPasswordEntry != passwordEntry -> binding.edtConfirmPassword.error = getString(R.string.msg_passwords_not_match)
             !isValidEmail(emailEntry) -> binding.edtEmail.error = getString(R.string.msg_input_valid_email)
 
-            else -> authViewModel.register(nameEntry, emailEntry, passwordEntry)
+            else -> {
+                authViewModel.updateProfile(nameEntry, emailEntry)
+            }
         }
+    }
+
+    private fun showLoading(state: Boolean) {
+        binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

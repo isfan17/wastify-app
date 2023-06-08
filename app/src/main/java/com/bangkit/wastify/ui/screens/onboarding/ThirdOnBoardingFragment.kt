@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.bangkit.wastify.R
 import com.bangkit.wastify.databinding.FragmentThirdOnBoardingBinding
 import com.bangkit.wastify.utils.Constants.KEY_FIRST_TIME_TOGGLE
@@ -33,6 +34,12 @@ class ThirdOnBoardingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val viewPager = activity?.findViewById<ViewPager2>(R.id.view_pager)
+
+        binding.btnPrevious.setOnClickListener {
+            viewPager?.currentItem = 1
+        }
 
         binding.btnGetStarted.setOnClickListener {
             findNavController().navigate(R.id.action_onBoardingContainerFragment_to_loginFragment)

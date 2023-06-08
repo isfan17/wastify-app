@@ -11,19 +11,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bangkit.wastify.R
-import com.bangkit.wastify.databinding.FragmentRegisterBinding
+import com.bangkit.wastify.databinding.FragmentForgotPasswordBinding
 import com.bangkit.wastify.ui.components.LoadingDialog
 import com.bangkit.wastify.ui.viewmodels.AuthViewModel
-import com.bangkit.wastify.utils.Helper.isValidEmail
+import com.bangkit.wastify.utils.Helper
 import com.bangkit.wastify.utils.Helper.toast
 import com.bangkit.wastify.utils.UiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RegisterFragment : Fragment() {
+class ForgotPasswordFragment : Fragment() {
 
-    private var _binding: FragmentRegisterBinding? = null
+    private var _binding: FragmentForgotPasswordBinding? = null
     private val binding get() = _binding!!
 
     private val authViewModel: AuthViewModel by viewModels()
@@ -33,7 +33,7 @@ class RegisterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        _binding = FragmentForgotPasswordBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -41,12 +41,12 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val loadingDialog = LoadingDialog(this)
 
-        // Validating register result
+        // Validating forgot password result
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.registerFlow.collect { state ->
+                authViewModel.forgotPasswordFlow.collect { state ->
                     if (state != null) {
-                        when(state) {
+                        when (state) {
                             UiState.Loading -> loadingDialog.show()
                             is UiState.Failure -> {
                                 loadingDialog.dismiss()
@@ -54,8 +54,8 @@ class RegisterFragment : Fragment() {
                             }
                             is UiState.Success -> {
                                 loadingDialog.dismiss()
-                                toast(getString(R.string.msg_register_success))
-                                findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
+                                toast(state.data)
+                                findNavController().navigateUp()
                             }
                         }
                     }
@@ -63,34 +63,22 @@ class RegisterFragment : Fragment() {
             }
         }
 
-        // Do register process
-        binding.btnRegister.setOnClickListener {
-            register()
+        binding.btnSend.setOnClickListener {
+            sendForgotPasswordToEmail()
         }
 
-        // Move to login page
-        binding.btnLogin.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
     }
 
-    private fun register() {
-        val nameEntry = binding.edtFullName.text.toString()
+    private fun sendForgotPasswordToEmail() {
         val emailEntry = binding.edtEmail.text.toString()
-        val passwordEntry = binding.edtPassword.text.toString()
-        val confirmPasswordEntry = binding.edtConfirmPassword.text.toString()
 
-        // Checking the form requirement
         when {
-            nameEntry.isEmpty() -> binding.edtFullName.error = getString(R.string.msg_field_required)
             emailEntry.isEmpty() -> binding.edtEmail.error = getString(R.string.msg_field_required)
-            passwordEntry.isEmpty() -> binding.edtPassword.error = getString(R.string.msg_field_required)
-            confirmPasswordEntry.isEmpty() -> binding.edtConfirmPassword.error = getString(R.string.msg_field_required)
-
-            confirmPasswordEntry != passwordEntry -> binding.edtConfirmPassword.error = getString(R.string.msg_passwords_not_match)
-            !isValidEmail(emailEntry) -> binding.edtEmail.error = getString(R.string.msg_input_valid_email)
-
-            else -> authViewModel.register(nameEntry, emailEntry, passwordEntry)
+            !Helper.isValidEmail(emailEntry) -> binding.edtEmail.error = getString(R.string.msg_input_valid_email)
+            else -> authViewModel.forgotPassword(emailEntry)
         }
     }
 
@@ -98,5 +86,4 @@ class RegisterFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

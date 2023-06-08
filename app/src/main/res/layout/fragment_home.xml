@@ -44,16 +44,17 @@
         app:layout_constraintTop_toTopOf="@id/tv_app_name"
         app:srcCompat="@drawable/ic_history_outline_24_primary" />
 
+    <!-- SCROLL CONTAINER FOR HOME CONTENTS -->
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
         android:scrollbars="none"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_app_name"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_app_name">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container_scroll"
@@ -65,22 +66,22 @@
                 android:id="@+id/card_banner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
                 android:background="@drawable/custom_card_rounded_filled_primary"
-                app:layout_constraintTop_toTopOf="parent"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <!-- TEXT GREETINGS NAME -->
                 <TextView
                     android:id="@+id/tv_greetings_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@string/dummy_greetings_name" />
 
@@ -91,8 +92,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/msg_identify_waste"
                     android:textColor="@color/white"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_greetings_name" />
 
                 <!-- CARD USER'S STATS -->
@@ -101,10 +102,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:padding="16dp"
                     android:background="@drawable/custom_card_rounded_filled_white"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:padding="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_greetings_msg">
 
                     <!-- TEXT USER'S IDENTIFIED WASTE-->
@@ -112,13 +113,13 @@
                         android:id="@+id/tv_waste_identified"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textAlignment="center"
-                        android:textStyle="bold"
-                        android:textColor="@color/green"
                         android:text="@string/dummy_total_waste_identified"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:textAlignment="center"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@id/divider_vertical"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <!-- VERTICAL DIVIDER -->
@@ -128,23 +129,23 @@
                         android:layout_height="0dp"
                         android:layout_marginHorizontal="8dp"
                         android:background="@color/gray_light"
-                        app:layout_constraintStart_toEndOf="@id/tv_waste_identified"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_title_waste_identified"
                         app:layout_constraintEnd_toStartOf="@id/tv_categories_found"
-                        app:layout_constraintTop_toTopOf="@id/tv_waste_identified"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_title_waste_identified" />
+                        app:layout_constraintStart_toEndOf="@id/tv_waste_identified"
+                        app:layout_constraintTop_toTopOf="@id/tv_waste_identified" />
 
-                    <!-- TEXT USER'S FOUNDED CATEGORIES -->
+                    <!-- TEXT USER'S FOUND CATEGORIES -->
                     <TextView
                         android:id="@+id/tv_categories_found"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textAlignment="center"
-                        android:textStyle="bold"
-                        android:textColor="@color/green"
                         android:text="@string/dummy_total_categories_found"
-                        app:layout_constraintStart_toEndOf="@id/divider_vertical"
+                        android:textAlignment="center"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/divider_vertical"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <!-- TEXT TITLE IDENTIFIED WASTE -->
@@ -155,8 +156,8 @@
                         android:text="@string/waste_identified"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        app:layout_constraintStart_toStartOf="@id/tv_waste_identified"
                         app:layout_constraintEnd_toEndOf="@id/tv_waste_identified"
+                        app:layout_constraintStart_toStartOf="@id/tv_waste_identified"
                         app:layout_constraintTop_toBottomOf="@id/tv_waste_identified" />
 
                     <!-- TEXT TITLE IDENTIFIED WASTE -->
@@ -167,8 +168,8 @@
                         android:text="@string/categories_found"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        app:layout_constraintStart_toStartOf="@id/tv_categories_found"
                         app:layout_constraintEnd_toEndOf="@id/tv_categories_found"
+                        app:layout_constraintStart_toStartOf="@id/tv_categories_found"
                         app:layout_constraintTop_toBottomOf="@id/tv_categories_found" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -182,11 +183,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/waste_categories"
+                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/card_banner" />
 
             <!-- RECYCLERVIEW WASTE CATEGORIES -->
@@ -196,9 +197,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:overScrollMode="never"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_title_waste_categories"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_waste_categories" />
 
             <!-- LOADING ANIM FOR CATEGORIES -->
             <ProgressBar
@@ -206,10 +207,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@id/rv_categories"
+                app:layout_constraintBottom_toBottomOf="@id/rv_categories"
                 app:layout_constraintEnd_toEndOf="@id/rv_categories"
-                app:layout_constraintTop_toTopOf="@id/rv_categories"
-                app:layout_constraintBottom_toBottomOf="@id/rv_categories" />
+                app:layout_constraintStart_toStartOf="@id/rv_categories"
+                app:layout_constraintTop_toTopOf="@id/rv_categories" />
 
             <!-- TEXT TITLE RELATED ARTICLES -->
             <TextView
@@ -218,11 +219,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/related_articles"
+                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rv_categories" />
 
             <!-- RECYCLERVIEW RELATED ARTICLES -->
@@ -231,8 +232,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_title_articles" />
 
             <!-- LOADING ANIM FOR ARTICLES -->
@@ -241,10 +242,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@id/rv_articles"
+                app:layout_constraintBottom_toBottomOf="@id/rv_articles"
                 app:layout_constraintEnd_toEndOf="@id/rv_articles"
-                app:layout_constraintTop_toTopOf="@id/rv_articles"
-                app:layout_constraintBottom_toBottomOf="@id/rv_articles" />
+                app:layout_constraintStart_toStartOf="@id/rv_articles"
+                app:layout_constraintTop_toTopOf="@id/rv_articles" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

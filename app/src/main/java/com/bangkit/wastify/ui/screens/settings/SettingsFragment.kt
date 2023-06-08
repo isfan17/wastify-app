@@ -34,7 +34,7 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Setting user full name and email
-        updateUserData()
+        setUserData()
 
         // Do logout process
         binding.btnLogout.setOnClickListener { _ ->
@@ -53,11 +53,16 @@ class SettingsFragment : Fragment() {
             }
         }
 
+        // Move to edit profile page
+        binding.btnEditProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_editProfileFragment)
+        }
+
         // Back btn
         binding.btnBack.setOnClickListener { findNavController().navigateUp() }
     }
 
-    private fun updateUserData() {
+    private fun setUserData() {
         binding.tvFullName.text = authViewModel.currentUser?.displayName
         binding.tvEmail.text = authViewModel.currentUser?.email
     }
