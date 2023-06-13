@@ -73,7 +73,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback, GoogleMap.InfoWindowAdap
             if (isGranted) {
                 getMyLocation()
             } else {
-                Toast.makeText(requireContext(), "Can't access your location. Check your permissions for this app", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.msg_error_location_access), Toast.LENGTH_SHORT).show()
             }
         }
 

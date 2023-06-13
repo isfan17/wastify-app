@@ -1,22 +1,31 @@
 package com.bangkit.wastify.ui.screens.settings
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bangkit.wastify.R
+import com.bangkit.wastify.data.model.User
 import com.bangkit.wastify.databinding.FragmentEditProfileBinding
 import com.bangkit.wastify.ui.viewmodels.AuthViewModel
 import com.bangkit.wastify.utils.Helper.isValidEmail
 import com.bangkit.wastify.utils.Helper.toast
 import com.bangkit.wastify.utils.UiState
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -26,6 +35,9 @@ class EditProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val authViewModel: AuthViewModel by viewModels()
+    private var user: User? = null
+
+    private var bitmapEntry: Bitmap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,23 +50,33 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUserData()
 
-        // Validating update profile result
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.profileUpdatesFlow.collect { state ->
-                    if (state != null) {
-                        when (state) {
-                            UiState.Loading -> showLoading(true)
-                            is UiState.Failure -> {
-                                showLoading(false)
-                                toast(state.error.toString())
-                            }
-                            is UiState.Success -> {
-                                showLoading(false)
-                                toast(getString(R.string.msg_profile_updated))
-                                findNavController().navigateUp()
+
+                // Set user data
+                launch {
+                    authViewModel.userFlow.collectLatest {
+                        user = it
+                        setUserData()
+                    }
+                }
+
+                // Check update result
+                launch {
+                    authViewModel.profileUpdatesFlow.collectLatest {
+                        if (it != null) {
+                            when (it) {
+                                UiState.Loading -> showLoading(true)
+                                is UiState.Failure -> {
+                                    showLoading(false)
+                                    toast(it.error.toString())
+                                }
+                                is UiState.Success -> {
+                                    showLoading(false)
+                                    toast(it.data)
+                                    findNavController().navigateUp()
+                                }
                             }
                         }
                     }
@@ -62,13 +84,9 @@ class EditProfileFragment : Fragment() {
             }
         }
 
-        binding.btnUpdate.setOnClickListener {
-            if (dataChanged()) {
-                updateProfile()
-            } else {
-                toast(getString(R.string.msg_no_data_changed))
-            }
-        }
+        binding.btnUpdate.setOnClickListener { updateProfile() }
+
+        binding.ivProfile.setOnClickListener { startGallery() }
 
         binding.btnForgot.setOnClickListener {
             findNavController().navigate(R.id.action_editProfileFragment_to_forgotPasswordFragment)
@@ -77,18 +95,6 @@ class EditProfileFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
-    }
-
-    private fun setUserData() {
-        binding.edtFullName.setText(authViewModel.currentUser?.displayName.toString())
-        binding.edtEmail.setText(authViewModel.currentUser?.email.toString())
-    }
-
-    private fun dataChanged(): Boolean {
-        val nameEntry = binding.edtFullName.text.toString()
-        val emailEntry = binding.edtEmail.text.toString()
-        return !(nameEntry == authViewModel.currentUser?.displayName.toString()
-                && emailEntry == authViewModel.currentUser?.email.toString())
     }
 
     private fun updateProfile() {
@@ -102,8 +108,54 @@ class EditProfileFragment : Fragment() {
             !isValidEmail(emailEntry) -> binding.edtEmail.error = getString(R.string.msg_input_valid_email)
 
             else -> {
-                authViewModel.updateProfile(nameEntry, emailEntry)
+                authViewModel.updateProfile(nameEntry, emailEntry, bitmapEntry)
             }
+        }
+    }
+
+    private fun setUserData() {
+        binding.edtFullName.setText(user?.name)
+        binding.edtEmail.setText(user?.email)
+
+        if (user?.imageUrl == null) {
+            binding.ivProfile.setImageResource(R.drawable.default_profile)
+        } else {
+            Glide.with(this)
+                .load(user?.imageUrl)
+                .into(binding.ivProfile)
+        }
+    }
+
+    private fun startGallery() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.type = "image/*"
+        val chooser = Intent.createChooser(intent, getString(R.string.msg_choose_picture))
+        launcherIntentGallery.launch(chooser)
+    }
+
+    private val launcherIntentGallery = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val selectedImg: Uri = result.data?.data as Uri
+            Glide.with(this)
+                .load(selectedImg)
+                .into(binding.ivProfile)
+
+
+            selectedImg.let { uri ->
+                val bitmap: Bitmap? = try {
+                    val inputStream = requireContext().contentResolver.openInputStream(uri)
+                    BitmapFactory.decodeStream(inputStream)
+                } catch (e: Exception) {
+                    toast(e.message.toString())
+                    e.printStackTrace()
+                    null
+                }
+                bitmapEntry = bitmap
+            }
+
         }
     }
 

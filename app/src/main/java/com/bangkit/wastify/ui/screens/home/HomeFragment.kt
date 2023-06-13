@@ -13,15 +13,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.wastify.R
+import com.bangkit.wastify.data.model.User
 import com.bangkit.wastify.databinding.FragmentHomeBinding
 import com.bangkit.wastify.ui.adapters.ArticleCardAdapter
 import com.bangkit.wastify.ui.adapters.CategoryGridAdapter
-import com.bangkit.wastify.utils.CategoryGridSpacing
+import com.bangkit.wastify.ui.adapters.TypeAdapter
+import com.bangkit.wastify.utils.CustomGridSpacing
 import com.bangkit.wastify.ui.viewmodels.AuthViewModel
-import com.bangkit.wastify.ui.viewmodels.WasteViewModel
-import com.bangkit.wastify.utils.Helper.toast
-import com.bangkit.wastify.utils.UiState
+import com.bangkit.wastify.ui.viewmodels.MainViewModel
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -31,7 +33,13 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val authViewModel: AuthViewModel by viewModels()
-    private val wasteViewModel: WasteViewModel by viewModels()
+    private val wasteViewModel: MainViewModel by viewModels()
+
+    private val typeAdapter by lazy {
+        TypeAdapter(
+            onItemClicked = {}
+        )
+    }
 
     private val categoriesAdapter by lazy {
         CategoryGridAdapter(
@@ -62,54 +70,41 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvGreetingsName.text = getString(R.string.value_full_name, authViewModel.currentUser?.displayName)
 
         // Recyclerview setup
+        setupTypesRecyclerView()
         setupCategoriesRecyclerView()
         setupArticlesRecyclerView()
 
-        // Retrieve categories and articles data
-        wasteViewModel.getCategories()
-        wasteViewModel.getArticles()
-
+        // Retrieve data
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
+                // User
+                launch {
+                    authViewModel.userFlow.collectLatest {
+                        setUserData(it)
+                    }
+                }
+
+                // Types
+                launch {
+                    wasteViewModel.typesFlow.collectLatest {
+                        if (it != null) { typeAdapter.submitList(it) }
+                    }
+                }
+
                 // Categories
                 launch {
-                    wasteViewModel.categoriesFlow.collect { categoriesState ->
-                        if (categoriesState != null) {
-                            when (categoriesState) {
-                                UiState.Loading -> showCategoryLoading(true)
-                                is UiState.Failure -> {
-                                    showCategoryLoading(false)
-                                    toast(categoriesState.error.toString())
-                                }
-                                is UiState.Success -> {
-                                    showCategoryLoading(false)
-                                    categoriesAdapter.submitList(categoriesState.data)
-                                }
-                            }
-                        }
+                    wasteViewModel.categoriesFlow.collectLatest {
+                        if (it != null) { categoriesAdapter.submitList(it) }
                     }
                 }
 
                 // Articles
                 launch {
-                    wasteViewModel.articlesFlow.collect { articlesState ->
-                        if (articlesState != null) {
-                            when (articlesState) {
-                                UiState.Loading -> showArticlesLoading(true)
-                                is UiState.Failure -> {
-                                    showArticlesLoading(false)
-                                    toast(articlesState.error.toString())
-                                }
-                                is UiState.Success -> {
-                                    showArticlesLoading(false)
-                                    articlesAdapter.submitList(articlesState.data)
-                                }
-                            }
-                        }
+                    wasteViewModel.articlesFlow.collectLatest {
+                        if (it != null) { articlesAdapter.submitList(it) }
                     }
                 }
             }
@@ -126,8 +121,15 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun setupTypesRecyclerView() {
+        val itemDecoration = CustomGridSpacing(requireContext(), R.dimen.grid_item_offset)
+        binding.rvTypes.layoutManager = GridLayoutManager(requireContext(), 5)
+        binding.rvTypes.addItemDecoration(itemDecoration)
+        binding.rvTypes.adapter = typeAdapter
+    }
+
     private fun setupCategoriesRecyclerView() {
-        val itemDecoration = CategoryGridSpacing(requireContext(), R.dimen.category_item_offset)
+        val itemDecoration = CustomGridSpacing(requireContext(), R.dimen.category_item_offset)
         binding.rvCategories.layoutManager = GridLayoutManager(requireContext(), 4)
         binding.rvCategories.addItemDecoration(itemDecoration)
         binding.rvCategories.adapter = categoriesAdapter
@@ -136,6 +138,17 @@ class HomeFragment : Fragment() {
     private fun setupArticlesRecyclerView() {
         binding.rvArticles.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvArticles.adapter = articlesAdapter
+    }
+
+    private fun setUserData(user: User?) {
+        binding.tvGreetingsName.text = getString(R.string.value_full_name, user?.name)
+        if (user?.imageUrl == null) {
+            binding.ivProfile.setImageResource(R.drawable.default_profile)
+        } else {
+            Glide.with(this)
+                .load(user.imageUrl)
+                .into(binding.ivProfile)
+        }
     }
 
     private fun showCategoryLoading(state: Boolean) {

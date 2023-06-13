@@ -38,6 +38,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        mlModelBinding true
     }
 }
 
@@ -51,7 +52,7 @@ dependencies {
     // General Jetpack Libraries
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
     implementation "androidx.activity:activity-ktx:1.7.2"
-    implementation "androidx.fragment:fragment-ktx:1.5.7"
+    implementation "androidx.fragment:fragment-ktx:1.6.0"
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     // Coroutines
@@ -63,11 +64,16 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
-    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.6.0"
+    implementation "androidx.navigation:navigation-ui-ktx:2.6.0"
+
+    // TF Lite
+    implementation 'org.tensorflow:tensorflow-lite-support:0.1.0'
+    implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0'
 
     // Dagger Core
     implementation "com.google.dagger:dagger:2.45"
+    implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
     kapt "com.google.dagger:dagger-compiler:2.45"
 
     // Dagger - Hilt

@@ -7,8 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bangkit.wastify.R
+import com.bangkit.wastify.data.model.User
 import com.bangkit.wastify.databinding.FragmentSplashBinding
 import com.bangkit.wastify.ui.viewmodels.AuthViewModel
 import com.bangkit.wastify.utils.Constants.KEY_FIRST_TIME_TOGGLE
@@ -16,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +34,7 @@ class SplashFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val authViewModel: AuthViewModel by viewModels()
+    private var user: User? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +48,14 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authViewModel.userFlow.collectLatest {
+                    user = it
+                }
+            }
+        }
+
         CoroutineScope(Dispatchers.Main).launch {
             delay(1500)
 
@@ -50,7 +64,7 @@ class SplashFragment : Fragment() {
                 findNavController().navigate(R.id.action_splashFragment_to_onBoardingContainerFragment)
             } else {
                 // Checking if the user already login
-                if (authViewModel.currentUser != null) {
+                if (user != null) {
                     findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                 } else {
                     findNavController().navigate(R.id.action_splashFragment_to_loginFragment)

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.bangkit.wastify.R
 import com.bangkit.wastify.databinding.FragmentHistoryBinding
 import com.bangkit.wastify.ui.adapters.HistoryFragmentsAdapter
 import com.google.android.material.tabs.TabLayoutMediator

@@ -138,10 +138,6 @@ class CameraFragment : Fragment() {
             outputOptions,
             ContextCompat.getMainExecutor(requireActivity()),
             object : ImageCapture.OnImageSavedCallback {
-                override fun onError(exc: ImageCaptureException) {
-                    toast(getString(R.string.msg_fail_capture_photo))
-                }
-
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val isBackCamera: Int = if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) 1 else -1
                     val action = CameraFragmentDirections.actionCameraFragmentToResultFragment(
@@ -151,6 +147,11 @@ class CameraFragment : Fragment() {
                     )
                     findNavController().navigate(action)
                     loadingDialog.dismiss()
+                }
+
+                override fun onError(exc: ImageCaptureException) {
+                    loadingDialog.dismiss()
+                    toast(getString(R.string.msg_fail_capture_photo))
                 }
             }
         )

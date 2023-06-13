@@ -27,6 +27,7 @@
     <string name="get_started">Get Started</string>
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="back">Back</string>
     <string name="category">Category</string>
     <string name="category_detail">Category Detail</string>
@@ -102,5 +103,9 @@
     <string name="type">Type</string>
     <string name="dummy_waste_type">Inorganic</string>
     <string name="recyclable">Recyclable</string>
+    <string name="msg_error_location_access">Can\'t access your location. Check your permissions for this app</string>
+    <string name="ml_result">ML Result</string>
+    <string name="waste_types">Waste Types</string>
+    <string name="save_profile">Save Profile</string>
 
 </resources>

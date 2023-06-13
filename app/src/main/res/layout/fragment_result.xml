@@ -53,104 +53,163 @@
         app:srcCompat="@drawable/dummy_waste_image" />
 
     <TextView
-        android:id="@+id/tv_text_date"
+        android:id="@+id/tv_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/date"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_result" />
-
-    <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="32sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/tv_text_date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_text_date"
-        android:text="@string/dummy_result_date" />
+        android:textColor="@color/green"
+        app:layout_constraintStart_toStartOf="@id/iv_result"
+        app:layout_constraintEnd_toEndOf="@id/iv_result"
+        app:layout_constraintTop_toTopOf="@id/iv_result"
+        app:layout_constraintBottom_toBottomOf="@id/iv_result" />
 
+    <!-- TYPE TITLE -->
     <TextView
         android:id="@+id/tv_text_type"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
         android:text="@string/type"
-        android:textSize="16sp"
+        android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_text_date" />
-
-    <TextView
-        android:id="@+id/tv_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:drawablePadding="4dp"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:drawableEndCompat="@drawable/ic_info_outline_24"
-        app:layout_constraintBottom_toBottomOf="@id/tv_text_type"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_text_type"
-        android:text="@string/dummy_waste_type" />
-
+        app:layout_constraintEnd_toStartOf="@id/tv_text_category"
+        app:layout_constraintTop_toBottomOf="@id/iv_result" />
+    
+    <!-- CATEGORY TITLE -->
     <TextView
         android:id="@+id/tv_text_category"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:text="@string/category"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_text_type" />
-
-    <TextView
-        android:id="@+id/tv_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:drawablePadding="4dp"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:drawableEndCompat="@drawable/ic_info_outline_24"
-        app:layout_constraintBottom_toBottomOf="@id/tv_text_category"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_text_category"
-        android:text="@string/dummy_category" />
-
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@id/tv_text_type"
+        app:layout_constraintEnd_toStartOf="@id/tv_text_recyclable"
+        app:layout_constraintTop_toTopOf="@id/tv_text_type"
+        app:layout_constraintBottom_toBottomOf="@id/tv_text_type" />
+    
+    <!-- RECYCLABLE TITLE -->
     <TextView
         android:id="@+id/tv_text_recyclable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/recyclable"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_text_category" />
-
-    <TextView
-        android:id="@+id/tv_recyclable"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/tv_text_recyclable"
+        android:text="@string/recyclable"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@id/tv_text_category"
+        app:layout_constraintTop_toTopOf="@id/tv_text_category"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_text_recyclable"
-        android:text="@string/yes" />
+        app:layout_constraintBottom_toBottomOf="@id/tv_text_category" />
+
+    <!-- IMAGE TYPE -->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_type"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@id/tv_text_type"
+        app:layout_constraintEnd_toEndOf="@id/tv_text_type"
+        app:layout_constraintTop_toBottomOf="@id/tv_text_type"
+        tools:src="@drawable/type_3" />
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/icon_type_info"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@color/white"
+        android:contentDescription="@string/change_profile_picture"
+        app:layout_constraintBottom_toBottomOf="@id/iv_type"
+        app:layout_constraintEnd_toEndOf="@id/iv_type"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+        app:srcCompat="@drawable/ic_info_outline_24" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_category"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@id/tv_text_category"
+        app:layout_constraintEnd_toEndOf="@id/tv_text_category"
+        app:layout_constraintTop_toBottomOf="@id/tv_text_category"
+        tools:src="@drawable/icon_img_plastic" />
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/icon_category_info"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@color/white"
+        android:contentDescription="@string/change_profile_picture"
+        app:layout_constraintBottom_toBottomOf="@id/iv_category"
+        app:layout_constraintEnd_toEndOf="@id/iv_category"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+        app:srcCompat="@drawable/ic_info_outline_24" />
+
+    <!-- IMAGE RECYCLABLE -->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_recyclable"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@id/tv_text_recyclable"
+        app:layout_constraintEnd_toEndOf="@id/tv_text_recyclable"
+        app:layout_constraintTop_toBottomOf="@id/tv_text_recyclable"
+        tools:src="@drawable/recyclable_no" />
+
+    <!-- TYPE VALUE -->
+    <TextView
+        android:id="@+id/tv_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/type"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_category"
+        app:layout_constraintTop_toBottomOf="@id/iv_type" />
+
+    <!-- CATEGORY VALUE -->
+    <TextView
+        android:id="@+id/tv_category"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/category"
+        android:textSize="16sp"
+        android:textColor="@color/green"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@id/tv_type"
+        app:layout_constraintEnd_toStartOf="@id/tv_recyclable"
+        app:layout_constraintTop_toTopOf="@id/tv_type"
+        app:layout_constraintBottom_toBottomOf="@id/tv_type" />
+
+    <!-- RECYCLABLE VALUE -->
+    <TextView
+        android:id="@+id/tv_recyclable"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/recyclable"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@id/tv_category"
+        app:layout_constraintTop_toTopOf="@id/tv_category"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tv_category" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_category"
+        app:layout_constraintBottom_toTopOf="@id/btn_go_to_home" />
 
     <Button
         android:id="@+id/btn_go_to_home"
