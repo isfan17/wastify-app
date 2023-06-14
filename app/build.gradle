@@ -73,7 +73,7 @@ dependencies {
 
     // Dagger Core
     implementation "com.google.dagger:dagger:2.45"
-    implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.2.0'
     kapt "com.google.dagger:dagger-compiler:2.45"
 
     // Dagger - Hilt
@@ -118,4 +118,6 @@ dependencies {
     // Google Maps Service
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.google.android.libraries.places:places:3.1.0'
+
 }

@@ -107,5 +107,11 @@
     <string name="ml_result">ML Result</string>
     <string name="waste_types">Waste Types</string>
     <string name="save_profile">Save Profile</string>
+    <string name="msg_turn_on_gps">Turn on your gps to show your location on map</string>
+    <string name="msg_error_waste_disposal_location">Can\'t show waste disposal location.</string>
+    <string name="dummy_location_name">TPS 3R Rawasari</string>
+    <string name="dummy_location_address">Jl. Rawa Kerbau No. 5A, Jl. Rawasari Sel. No.RT.16, RT.16/RW.2, Cemp. Putih Tim., Kec. Cemp. Putih, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10510</string>
+    <string name="open">Open</string>
+    <string name="closed">Closed</string>
 
 </resources>

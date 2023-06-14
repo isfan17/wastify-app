@@ -3,14 +3,24 @@ package com.bangkit.wastify.utils
 import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.widget.Toast
+import androidx.annotation.DrawableRes
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import com.bangkit.wastify.R
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.libraries.places.api.model.LocalTime
+import com.google.android.libraries.places.api.model.OpeningHours
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -90,5 +100,48 @@ object Helper {
     private fun createCustomTempFile(context: Context): File {
         val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(timeStamp, ".jpg", storageDir)
+    }
+
+    // CONVERT VECTOR TO BITMAP DESCRIPTOR
+    fun vectorToBitmap(@DrawableRes id: Int, res: Resources): BitmapDescriptor {
+        val vectorDrawable = ResourcesCompat.getDrawable(res, id, null)
+        if (vectorDrawable == null) {
+            Timber.e("Resource not found")
+            return BitmapDescriptorFactory.defaultMarker()
+        }
+        val bitmap = Bitmap.createBitmap(
+            vectorDrawable.intrinsicWidth,
+            vectorDrawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
+        vectorDrawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
+
+    // FORMAT OPENING HOURS OBJECT TO STRING
+    fun formatOpeningHours(openingHours: OpeningHours?): String {
+        openingHours?.periods?.firstOrNull()?.let { period ->
+            val openTime = formatTime(period.open?.time)
+            val closeTime = formatTime(period.close?.time)
+
+            if (openTime != null && closeTime != null) {
+                return "$openTime - $closeTime"
+            }
+        }
+        return "Unknown"
+    }
+
+    // FORMAT TIME FOR OPENING HOURS
+    private fun formatTime(time: LocalTime?): String? {
+        return time?.let {
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.HOUR_OF_DAY, time.hours)
+            calendar.set(Calendar.MINUTE, time.minutes)
+
+            val format = SimpleDateFormat("HH:mm", Locale.getDefault())
+            format.format(calendar.time)
+        }
     }
 }
