@@ -23,6 +23,7 @@ import com.bangkit.wastify.ui.components.LoadingDialog
 import com.bangkit.wastify.utils.Helper.createPhotoFile
 import com.bangkit.wastify.utils.Helper.toast
 import com.bangkit.wastify.utils.Helper.uriToFile
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -73,6 +74,18 @@ class CameraFragment : Fragment() {
         binding.btnShutter.setOnClickListener { takePhoto() }
         // Handle back action
         binding.btnBack.setOnClickListener { findNavController().navigateUp() }
+        // Btn info
+        binding.btnInfo.setOnClickListener {
+            context?.let { ctx ->
+                MaterialAlertDialogBuilder(ctx)
+                    .setTitle(getString(R.string.more_accurate_result))
+                    .setMessage(getString(R.string.msg_more_accurate))
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+        }
     }
 
     private fun startCamera() {

@@ -54,12 +54,8 @@ class RepositoryModule {
             }
 
             private suspend fun populateDatabase() {
-                val categories = DummyDataSource.getCategories()
                 val articles = DummyDataSource.getArticles()
-                val types = DummyDataSource.getTypes()
-                provider.get().insertCategories(categories)
                 provider.get().insertArticles(articles)
-                provider.get().insertTypes(types)
             }
         })
         .build()

@@ -1,5 +1,6 @@
 package com.bangkit.wastify.ui.screens.identify
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,11 +14,16 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bangkit.wastify.R
+import com.bangkit.wastify.data.model.Identification
 import com.bangkit.wastify.databinding.FragmentResultBinding
+import com.bangkit.wastify.ui.components.LoadingDialog
 import com.bangkit.wastify.ui.viewmodels.MainViewModel
+import com.bangkit.wastify.utils.Helper.getCurrentFormattedDate
 import com.bangkit.wastify.utils.Helper.rotateBitmap
 import com.bangkit.wastify.utils.Helper.toast
+import com.bangkit.wastify.utils.Helper.uriToBitmap
 import com.bangkit.wastify.utils.UiState
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -29,8 +35,9 @@ class ResultFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val navArgs: ResultFragmentArgs by navArgs()
-
     private val mainViewModel: MainViewModel by viewModels()
+
+    lateinit var result: Identification
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,24 +50,27 @@ class ResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val loadingDialog = LoadingDialog(this)
+
+        binding.tvDate.text = getCurrentFormattedDate()
 
         val imageFile = navArgs.imageFile
         val imageUri = navArgs.imageUri
         val isBackCamera = navArgs.isBackCamera
 
         // Image is from Gallery
-        if (isBackCamera == 0) {
+        val imageResult: Bitmap? = if (isBackCamera == 0) {
             binding.ivResult.setImageURI(imageUri)
+            imageUri?.let { uriToBitmap(requireContext(), it) }
         }
         // Image is from Camera
         else {
-            val imageResult = rotateBitmap(
+            rotateBitmap(
                 BitmapFactory.decodeFile(imageFile.path),
                 isBackCamera
             )
-            // TEST ML FUNCTION IN ANDROID
-            mainViewModel.classifyWaste(imageResult)
         }
+        if (imageResult != null) { mainViewModel.classifyWaste(imageResult) }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -68,8 +78,15 @@ class ResultFragment : Fragment() {
                 launch {
                     mainViewModel.typeFlow.collectLatest { type ->
                         if (type != null) {
-                            binding.ivType.setImageResource(type.icon)
+                            Glide.with(this@ResultFragment)
+                                .load(type.icon)
+                                .into(binding.ivType)
                             binding.tvType.text = type.name
+
+                            binding.ivType.setOnClickListener {
+                                val action = ResultFragmentDirections.actionResultFragmentToTypeDetailFragment(type.id)
+                                findNavController().navigate(action)
+                            }
                         }
                     }
                 }
@@ -77,14 +94,21 @@ class ResultFragment : Fragment() {
                 launch {
                     mainViewModel.categoryFlow.collectLatest { category ->
                         if (category != null) {
-                            binding.ivCategory.setImageResource(category.icon)
+                            Glide.with(this@ResultFragment)
+                                .load(category.icon)
+                                .into(binding.ivCategory)
                             binding.tvCategory.text = category.name
+
+                            binding.ivCategory.setOnClickListener {
+                                val action = ResultFragmentDirections.actionResultFragmentToCategoryDetailFragment(category.id)
+                                findNavController().navigate(action)
+                            }
                         }
                     }
                 }
 
                 launch {
-                    mainViewModel.classificationFlow.collectLatest { state ->
+                    mainViewModel.identificationFlow.collectLatest { state ->
                         if (state != null) {
                             when (state) {
                                 UiState.Loading -> showLoading(true)
@@ -93,9 +117,9 @@ class ResultFragment : Fragment() {
                                     toast(state.error.toString())
                                 }
                                 is UiState.Success -> {
+                                    result = state.data
                                     showLoading(false)
                                     binding.ivResult.setImageBitmap(state.data.image)
-                                    binding.tvResult.text = state.data.result
 
                                     mainViewModel.getTypeById(state.data.typeId)
                                     mainViewModel.getCategoryById(state.data.categoryId)
@@ -109,11 +133,34 @@ class ResultFragment : Fragment() {
                         }
                     }
                 }
+
+                launch {
+                    mainViewModel.saveResultFlow.collectLatest {
+                        if (it != null) {
+                            when (it) {
+                                UiState.Loading -> showLoading(true)
+                                is UiState.Failure -> {
+                                    showLoading(false)
+                                    toast(it.error.toString())
+                                }
+                                is UiState.Success -> {
+                                    showLoading(false)
+                                    toast(it.data)
+                                    findNavController().navigate(R.id.action_resultFragment_to_homeFragment)
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
         binding.btnGoToHome.setOnClickListener {
             findNavController().navigate(R.id.action_resultFragment_to_homeFragment)
+        }
+
+        binding.btnSaveResult.setOnClickListener {
+            mainViewModel.saveResult(result)
         }
 
         binding.btnBack.setOnClickListener {

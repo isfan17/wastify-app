@@ -73,7 +73,6 @@ dependencies {
 
     // Dagger Core
     implementation "com.google.dagger:dagger:2.45"
-    implementation 'com.google.firebase:firebase-storage-ktx:20.2.0'
     kapt "com.google.dagger:dagger-compiler:2.45"
 
     // Dagger - Hilt
@@ -83,6 +82,8 @@ dependencies {
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:32.0.0')
     implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.2.0'
+    implementation 'com.google.firebase:firebase-database-ktx:20.2.2'
 
     // Room DB
     implementation "androidx.room:room-runtime:2.5.1"
@@ -91,11 +92,6 @@ dependencies {
 
     // Preferences DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
-
-    // Network
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.5"
 
     // CameraX
     implementation "androidx.camera:camera-camera2:1.2.3"

@@ -135,41 +135,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_edit_profile" />
 
-    <!-- BUTTON CHANGE LANGUAGE -->
-    <LinearLayout
-        android:id="@+id/btn_language"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        android:paddingVertical="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider_one">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/change_language"
-            android:src="@drawable/ic_language_filled_24" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginHorizontal="8dp"
-            android:layout_weight="1"
-            android:text="@string/change_language" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/edit"
-            android:src="@drawable/ic_arrow_right_filled_24" />
-    </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider_two"
@@ -179,7 +144,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_language" />
+        app:layout_constraintTop_toBottomOf="@id/btn_edit_profile" />
 
     <!-- BUTTON APP GUIDE -->
     <LinearLayout
@@ -217,52 +182,6 @@
             android:src="@drawable/ic_arrow_right_filled_24" />
     </LinearLayout>
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider_three"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_guide" />
-
-    <!-- BUTTON FAQs -->
-    <LinearLayout
-        android:id="@+id/btn_faq"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        android:paddingVertical="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider_three">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/faqs"
-            android:src="@drawable/ic_help_outline_24" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginHorizontal="8dp"
-            android:layout_weight="1"
-            android:text="@string/faqs" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/edit"
-            android:src="@drawable/ic_arrow_right_filled_24" />
-    </LinearLayout>
-
     <!-- BUTTON LOGOUT -->
     <Button
         android:id="@+id/btn_logout"
@@ -274,6 +193,6 @@
         android:text="@string/logout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_faq" />
+        app:layout_constraintTop_toBottomOf="@id/btn_guide" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -136,6 +136,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_homeFragment_to_typeDetailFragment"
+            app:destination="@id/typeDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -191,15 +198,15 @@
         android:label="fragment_category_detail"
         tools:layout="@layout/fragment_category_detail" >
         <argument
-            android:name="category"
-            app:argType="com.bangkit.wastify.data.model.Category" />
+            android:name="category_id"
+            app:argType="string" />
     </fragment>
 
     <fragment
         android:id="@+id/historyFragment"
-        android:name="com.bangkit.wastify.ui.screens.history.HistoryFragment"
+        android:name="com.bangkit.wastify.ui.screens.storage.StorageFragment"
         android:label="fragment_history"
-        tools:layout="@layout/fragment_history" />
+        tools:layout="@layout/fragment_storage" />
 
     <fragment
         android:id="@+id/articleDetailFragment"
@@ -207,8 +214,8 @@
         android:label="fragment_article_detail"
         tools:layout="@layout/fragment_article_detail">
         <argument
-            android:name="article"
-            app:argType="com.bangkit.wastify.data.model.Article" />
+            android:name="article_id"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
@@ -250,6 +257,20 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_resultFragment_to_typeDetailFragment"
+            app:destination="@id/typeDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_resultFragment_to_categoryDetailFragment"
+            app:destination="@id/categoryDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
@@ -263,5 +284,14 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/typeDetailFragment"
+        android:name="com.bangkit.wastify.ui.screens.home.TypeDetailFragment"
+        android:label="fragment_type_detail"
+        tools:layout="@layout/fragment_type_detail" >
+        <argument
+            android:name="type_id"
+            app:argType="string" />
     </fragment>
 </navigation>

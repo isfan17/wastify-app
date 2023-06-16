@@ -9,8 +9,8 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "articles")
 @Parcelize
 data class Article(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null,
+    @PrimaryKey
+    var id: String,
     @DrawableRes val image: Int,
     val title: String,
     val source: String,

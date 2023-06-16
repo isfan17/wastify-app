@@ -54,24 +54,37 @@
     <string name="msg_loading">Please wait…</string>
 
     <string name="value_full_name">Hello, %s</string>
+    <string name="value_categories_found">%s/8</string>
+
 
     <string name="dummy_greetings_name">Hello, Alexander Jamal</string>
     <string name="dummy_total_waste_identified">0</string>
-    <string name="dummy_total_categories_found">0/12</string>
+    <string name="dummy_total_categories_found">0/8</string>
     <string name="dummy_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</string>
     <string name="dummy_article_title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+
+    <string name="open">Open</string>
+    <string name="closed">Closed</string>
+    <string name="save_result">Save Result</string>
+    <string name="info">info</string>
+    <string name="storage">Storage</string>
+    <string name="waste_type_detail">Waste Type Detail</string>
+    <string name="disposal_methods">Disposal Methods</string>
+    <string name="waste_disposal_locations">Waste Disposal Locations</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="related_articles">Related Articles</string>
     <string name="article">Article</string>
+
     <string name="dummy_article_source">Google News</string>
     <string name="dummy_article_date">May 31, 2023</string>
+    <string name="dummy_result_date">April 29, 2023</string>
+    <string name="dummy_category">Plastic</string>
+
     <string name="article_detail">Article Detail</string>
     <string name="article_image">Article Image</string>
     <string name="result">Result</string>
     <string name="date">Date</string>
-    <string name="dummy_result_date">April 29, 2023</string>
-    <string name="dummy_category">Plastic</string>
     <string name="back_to_home_page">Back to Home Page</string>
     <string name="go_to_history_page">Go to History Page</string>
     <string name="go_to_home_page">Go to Home Page</string>
@@ -98,7 +111,7 @@
     <string name="no_data">No Data</string>
     <string name="no_saved_articles">No Saved Articles</string>
     <string name="msg_start_save_article">You can start saving interesting articles\nby tapping the Bookmark Icon\nin the right in the article details page</string>
-    <string name="msg_start_identify">You can start identify your waste\nby clicking the Identify Button in home page bottom bar</string>
+    <string name="msg_start_identify">You can start identify your waste\nby clicking the Identify Button\nin home page bottom bar</string>
     <string name="no_waste_identifications">No Waste Identifications</string>
     <string name="type">Type</string>
     <string name="dummy_waste_type">Inorganic</string>
@@ -111,7 +124,14 @@
     <string name="msg_error_waste_disposal_location">Can\'t show waste disposal location.</string>
     <string name="dummy_location_name">TPS 3R Rawasari</string>
     <string name="dummy_location_address">Jl. Rawa Kerbau No. 5A, Jl. Rawasari Sel. No.RT.16, RT.16/RW.2, Cemp. Putih Tim., Kec. Cemp. Putih, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10510</string>
-    <string name="open">Open</string>
-    <string name="closed">Closed</string>
+    <string name="msg_feature_under_development">Feature under development</string>
+    <string name="msg_more_accurate">Adjust the position of the waste/object to the center of the screen, and make sure to do one piece of info so that the results are more accurate.</string>
+    <string name="dot">dot</string>
+    <string name="ok">OK</string>
+    <string name="user_stats">User Stats</string>
+    <string name="msg_stats_rules">This statistics only applies to the saved identification results.</string>
+    <string name="show_my_location">Show My Location</string>
+    <string name="msg_activate_gps">Activate your gps, and click the top right button in the map to jump to your current location</string>
+    <string name="more_accurate_result">More Accurate Result</string>
 
 </resources>

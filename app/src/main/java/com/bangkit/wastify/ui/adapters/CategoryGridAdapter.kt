@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bangkit.wastify.data.model.Category
 import com.bangkit.wastify.databinding.ItemCategoryBinding
+import com.bumptech.glide.Glide
 
 class CategoryGridAdapter(
     val onItemClicked: (Category) -> Unit
@@ -24,7 +25,9 @@ class CategoryGridAdapter(
     inner class CategoryViewHolder(private val binding: ItemCategoryBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Category) {
-            binding.ivCategoryIcon.setImageResource(data.icon)
+            Glide.with(itemView)
+                .load(data.icon)
+                .into(binding.ivCategoryIcon)
             binding.tvCategoryName.text = data.name
             binding.root.setOnClickListener { onItemClicked.invoke(data) }
         }

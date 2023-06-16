@@ -32,6 +32,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.Place.Field
 import com.google.android.libraries.places.api.net.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.pow
 
@@ -63,6 +64,18 @@ class ExploreFragment : Fragment(), OnMapReadyCallback, GoogleMap.InfoWindowAdap
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.btnInfo.setOnClickListener {
+            context?.let { ctx ->
+                MaterialAlertDialogBuilder(ctx)
+                    .setTitle(getString(R.string.show_my_location))
+                    .setMessage(getString(R.string.msg_activate_gps))
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+        }
+
         val mapFragment = (childFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment)
         mapFragment.getMapAsync(this)
     }
@@ -74,6 +87,8 @@ class ExploreFragment : Fragment(), OnMapReadyCallback, GoogleMap.InfoWindowAdap
         map.uiSettings.isIndoorLevelPickerEnabled = true
         map.uiSettings.isCompassEnabled = true
         map.uiSettings.isMapToolbarEnabled = true
+
+        map.moveCamera(CameraUpdateFactory.newLatLng(LatLng(-2.5489, 118.0149)))
 
         getMyLocation()
         getWasteDisposalLocation()
@@ -135,7 +150,7 @@ class ExploreFragment : Fragment(), OnMapReadyCallback, GoogleMap.InfoWindowAdap
                 fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                     location?.let {
                         val latLng = LatLng(location.latitude, location.longitude)
-                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
                     }
                 }
             }
@@ -145,72 +160,63 @@ class ExploreFragment : Fragment(), OnMapReadyCallback, GoogleMap.InfoWindowAdap
     }
 
     private fun getWasteDisposalLocation() {
-        if (ContextCompat.checkSelfPermission(
-                requireActivity().applicationContext,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            // Define your query strings
-            val queries = listOf(
-                "TPS",
-                "TPSS",
-                "TPPS",
-                "TPAN",
-                "LPS",
-                "Pembuangan Sampah",
-                "Tempat Pembuangan",
-                "Bank Sampah",
-                "Sampah",
-            )
+        // Define your query strings
+        val queries = listOf(
+            "TPS",
+            "TPSS",
+            "TPPS",
+            "TPAN",
+            "LPS",
+            "Pembuangan Sampah",
+            "Tempat Pembuangan",
+            "Bank Sampah",
+            "Sampah",
+        )
 
-            for (query in queries) {
-                val request = FindAutocompletePredictionsRequest.builder()
-                    .setQuery(query)
-                    .setCountries("ID")
-                    .build()
+        for (query in queries) {
+            val request = FindAutocompletePredictionsRequest.builder()
+                .setQuery(query)
+                .setCountries("ID")
+                .build()
 
-                placesClient.findAutocompletePredictions(request)
-                    .addOnSuccessListener { response ->
-                        for (prediction in response.autocompletePredictions) {
-                            val placeId = prediction.placeId
+            placesClient.findAutocompletePredictions(request)
+                .addOnSuccessListener { response ->
+                    for (prediction in response.autocompletePredictions) {
+                        val placeId = prediction.placeId
 
-                            // Retrieve place details using place ID
-                            val placeFields = listOf(
-                                Field.LAT_LNG,
-                                Field.NAME,
-                                Field.ADDRESS,
-                                Field.OPENING_HOURS
-                            )
-                            val fetchRequest = FetchPlaceRequest.newInstance(placeId, placeFields)
-                            placesClient.fetchPlace(fetchRequest)
-                                .addOnSuccessListener { fetchResponse ->
-                                    val place = fetchResponse.place
-                                    val placeLatLng = place.latLng
+                        // Retrieve place details using place ID
+                        val placeFields = listOf(
+                            Field.LAT_LNG,
+                            Field.NAME,
+                            Field.ADDRESS,
+                            Field.OPENING_HOURS
+                        )
+                        val fetchRequest = FetchPlaceRequest.newInstance(placeId, placeFields)
+                        placesClient.fetchPlace(fetchRequest)
+                            .addOnSuccessListener { fetchResponse ->
+                                val place = fetchResponse.place
+                                val placeLatLng = place.latLng
 
-                                    // Create a marker options object
-                                    val markerOptions = placeLatLng?.let {
-                                        MarkerOptions()
-                                            .position(it)
-                                            .icon(vectorToBitmap(R.drawable.location_marker, resources))
-                                    }
-
-                                    // Add the marker to the map
-                                    if (markerOptions != null) {
-                                        map.addMarker(markerOptions)?.tag = place
-                                    }
+                                // Create a marker options object
+                                val markerOptions = placeLatLng?.let {
+                                    MarkerOptions()
+                                        .position(it)
+                                        .icon(vectorToBitmap(R.drawable.location_marker, resources))
                                 }
-                                .addOnFailureListener { exception ->
-                                    toast(exception.message.toString())
-                                }
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        toast(exception.message.toString())
-                    }
-            }
 
-        } else {
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                                // Add the marker to the map
+                                if (markerOptions != null) {
+                                    map.addMarker(markerOptions)?.tag = place
+                                }
+                            }
+                            .addOnFailureListener { exception ->
+                                toast(exception.message.toString())
+                            }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    toast(exception.message.toString())
+                }
         }
     }
 

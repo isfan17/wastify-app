@@ -21,8 +21,13 @@ import com.bangkit.wastify.ui.adapters.TypeAdapter
 import com.bangkit.wastify.utils.CustomGridSpacing
 import com.bangkit.wastify.ui.viewmodels.AuthViewModel
 import com.bangkit.wastify.ui.viewmodels.MainViewModel
+import com.bangkit.wastify.utils.Helper.countFoundCategories
+import com.bangkit.wastify.utils.Helper.toast
+import com.bangkit.wastify.utils.UiState
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -33,18 +38,21 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val authViewModel: AuthViewModel by viewModels()
-    private val wasteViewModel: MainViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
 
-    private val typeAdapter by lazy {
+    private val typesAdapter by lazy {
         TypeAdapter(
-            onItemClicked = {}
+            onItemClicked = {
+                val action = HomeFragmentDirections.actionHomeFragmentToTypeDetailFragment(it.id)
+                findNavController().navigate(action)
+            }
         )
     }
 
     private val categoriesAdapter by lazy {
         CategoryGridAdapter(
             onItemClicked = {
-                val action = HomeFragmentDirections.actionHomeFragmentToCategoryDetailFragment(it)
+                val action = HomeFragmentDirections.actionHomeFragmentToCategoryDetailFragment(it.id)
                 findNavController().navigate(action)
             }
         )
@@ -53,7 +61,7 @@ class HomeFragment : Fragment() {
     private val articlesAdapter by lazy {
         ArticleCardAdapter(
             onItemClicked = {
-                val action = HomeFragmentDirections.actionHomeFragmentToArticleDetailFragment(it)
+                val action = HomeFragmentDirections.actionHomeFragmentToArticleDetailFragment(it.id)
                 findNavController().navigate(action)
             }
         )
@@ -71,10 +79,27 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.btnInfo.setOnClickListener {
+            context?.let { ctx ->
+                MaterialAlertDialogBuilder(ctx)
+                    .setTitle(getString(R.string.user_stats))
+                    .setMessage(getString(R.string.msg_stats_rules))
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+        }
+
         // Recyclerview setup
         setupTypesRecyclerView()
         setupCategoriesRecyclerView()
         setupArticlesRecyclerView()
+
+        // Get Data
+        mainViewModel.getTypes()
+        mainViewModel.getCategories()
+        mainViewModel.getResults()
 
         // Retrieve data
         viewLifecycleOwner.lifecycleScope.launch {
@@ -87,23 +112,79 @@ class HomeFragment : Fragment() {
                     }
                 }
 
+                // Total Results
+                launch {
+                    mainViewModel.resultsFlow.collect {
+                        if (it != null) {
+                            when (it) {
+                                UiState.Loading -> showStatsLoading(true)
+                                is UiState.Failure -> {
+                                    showStatsLoading(false)
+                                    toast(it.error.toString())
+                                }
+                                is UiState.Success -> {
+                                    showStatsLoading(false)
+                                    binding.tvWasteIdentified.text = it.data.size.toString()
+                                    binding.tvCategoriesFound.text = getString(R.string.value_categories_found, countFoundCategories(it.data))
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // Types
                 launch {
-                    wasteViewModel.typesFlow.collectLatest {
-                        if (it != null) { typeAdapter.submitList(it) }
+                    mainViewModel.typesFlow.collectLatest {
+                        if (it != null) {
+                            if (it.isNotEmpty()) typesAdapter.submitList(it)
+                            else mainViewModel.fetchTypes()
+                        }
+                    }
+                }
+                launch {
+                    mainViewModel.fetchTypesFlow.collectLatest {
+                        if (it != null) {
+                            when (it) {
+                                UiState.Loading -> showTypesLoading(true)
+                                is UiState.Failure -> {
+                                    showTypesLoading(false)
+                                    toast(it.error.toString())
+                                }
+                                is UiState.Success -> {
+                                    showTypesLoading(false)
+                                }
+                            }
+                        }
                     }
                 }
 
                 // Categories
                 launch {
-                    wasteViewModel.categoriesFlow.collectLatest {
-                        if (it != null) { categoriesAdapter.submitList(it) }
+                    mainViewModel.categoriesFlow.collectLatest {
+                        if (it != null) {
+                            if (it.isNotEmpty()) categoriesAdapter.submitList(it)
+                            else mainViewModel.fetchCategories()
+                        }
+                    }
+                }
+                launch {
+                    mainViewModel.fetchCategoriesFlow.collectLatest {
+                        if (it != null) {
+                            when (it) {
+                                UiState.Loading -> showCategoriesLoading(true)
+                                is UiState.Failure -> {
+                                    showCategoriesLoading(false)
+                                    toast(it.error.toString())
+                                }
+                                is UiState.Success -> showCategoriesLoading(false)
+                            }
+                        }
                     }
                 }
 
                 // Articles
                 launch {
-                    wasteViewModel.articlesFlow.collectLatest {
+                    mainViewModel.articlesFlow.collectLatest {
                         if (it != null) { articlesAdapter.submitList(it) }
                     }
                 }
@@ -122,10 +203,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupTypesRecyclerView() {
-        val itemDecoration = CustomGridSpacing(requireContext(), R.dimen.grid_item_offset)
+        val itemDecoration = CustomGridSpacing(requireContext(), R.dimen.type_item_offset)
         binding.rvTypes.layoutManager = GridLayoutManager(requireContext(), 5)
         binding.rvTypes.addItemDecoration(itemDecoration)
-        binding.rvTypes.adapter = typeAdapter
+        binding.rvTypes.adapter = typesAdapter
     }
 
     private fun setupCategoriesRecyclerView() {
@@ -151,8 +232,17 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun showCategoryLoading(state: Boolean) {
+    private fun showTypesLoading(state: Boolean) {
+        binding.progressBarType.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
+    private fun showCategoriesLoading(state: Boolean) {
         binding.progressBarCategory.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
+    private fun showStatsLoading(state: Boolean) {
+        binding.progressBarStatOne.visibility = if (state) View.VISIBLE else View.GONE
+        binding.progressBarStatTwo.visibility = if (state) View.VISIBLE else View.GONE
     }
 
     private fun showArticlesLoading(state: Boolean) {

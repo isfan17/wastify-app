@@ -55,6 +55,7 @@ class AuthRepositoryImpl @Inject constructor(
                 name = result.user!!.displayName!!,
                 email = result.user!!.email!!
             )
+            wastifyDao.insertUser(objUser)
             UiState.Success(objUser)
         } catch (e: Exception) {
             UiState.Failure(e.message)
@@ -119,12 +120,13 @@ class AuthRepositoryImpl @Inject constructor(
     override fun getUser() = wastifyDao.getUser()
 
     override suspend fun logout() {
+        wastifyDao.clearResults()
         wastifyDao.deleteUser()
         firebaseAuth.signOut()
     }
 
     private suspend fun getUserImageUrl(id: String): String? {
-        val imgRef = firebaseStorage.reference.child("user_img/$id")
+        val imgRef = firebaseStorage.reference.child("user_img/$id/")
 
         return try {
             val downloadUrl: Uri = imgRef.downloadUrl.await()

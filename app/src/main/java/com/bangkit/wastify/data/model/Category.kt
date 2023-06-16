@@ -1,18 +1,18 @@
 package com.bangkit.wastify.data.model
 
-import android.os.Parcelable
-import androidx.annotation.DrawableRes
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.parcelize.Parcelize
+import androidx.room.TypeConverters
+import com.bangkit.wastify.data.db.Converters
 
 @Entity(tableName = "categories")
-@Parcelize
 data class Category(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null,
-    @DrawableRes val icon: Int,
-    @DrawableRes val image: Int,
+    @PrimaryKey
+    val id: String,
+    val icon: String,
+    val image: String,
     val name: String,
-    val description: String
-): Parcelable
+    val description: String,
+    @TypeConverters(Converters::class)
+    val disposalMethods: List<String>
+)

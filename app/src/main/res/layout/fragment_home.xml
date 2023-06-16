@@ -42,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_app_name"
         app:layout_constraintEnd_toStartOf="@id/btn_settings"
         app:layout_constraintTop_toTopOf="@id/tv_app_name"
-        app:srcCompat="@drawable/ic_history_outline_24_primary" />
+        app:srcCompat="@drawable/ic_bookmarks_filled_24" />
 
     <!-- SCROLL CONTAINER FOR HOME CONTENTS -->
     <ScrollView
@@ -73,6 +73,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <ImageView
+                    android:id="@+id/btn_info"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:contentDescription="@string/info"
+                    android:elevation="12dp"
+                    android:src="@drawable/ic_info_outline_24"
+                    app:layout_constraintEnd_toEndOf="@id/card_statistics"
+                    app:layout_constraintTop_toTopOf="@id/card_statistics" />
+
                 <!-- IMAGE USER -->
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iv_profile"
@@ -80,9 +92,9 @@
                     android:layout_height="46dp"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
                     tools:src="@tools:sample/avatars" />
 
                 <!-- TEXT GREETINGS NAME -->
@@ -107,9 +119,9 @@
                     android:layout_marginStart="8dp"
                     android:text="@string/msg_identify_waste"
                     android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_profile"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/iv_profile"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_profile" />
+                    app:layout_constraintStart_toEndOf="@id/iv_profile" />
 
                 <!-- CARD USER'S STATS -->
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -128,14 +140,14 @@
                         android:id="@+id/tv_waste_identified"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/dummy_total_waste_identified"
                         android:textAlignment="center"
                         android:textColor="@color/green"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@id/divider_vertical"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@string/dummy_total_waste_identified" />
 
                     <!-- VERTICAL DIVIDER -->
                     <View
@@ -154,13 +166,31 @@
                         android:id="@+id/tv_categories_found"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/dummy_total_categories_found"
                         android:textAlignment="center"
                         android:textColor="@color/green"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/divider_vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@string/dummy_total_categories_found" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar_stat_one"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="@id/tv_waste_identified"
+                        app:layout_constraintStart_toStartOf="@id/tv_waste_identified"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar_stat_two"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="@id/tv_categories_found"
+                        app:layout_constraintStart_toStartOf="@id/tv_categories_found"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <!-- TEXT TITLE IDENTIFIED WASTE -->
@@ -216,6 +246,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_title_waste_types" />
 
+            <!-- LOADING ANIM FOR TYPES -->
+            <ProgressBar
+                android:id="@+id/progress_bar_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/rv_types"
+                app:layout_constraintEnd_toEndOf="@id/rv_types"
+                app:layout_constraintStart_toStartOf="@id/rv_types"
+                app:layout_constraintTop_toTopOf="@id/rv_types" />
+
             <!-- TEXT TITLE WASTE CATEGORIES -->
             <TextView
                 android:id="@+id/tv_title_waste_categories"
@@ -246,6 +288,7 @@
                 android:id="@+id/progress_bar_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="16dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/rv_categories"
                 app:layout_constraintEnd_toEndOf="@id/rv_categories"
@@ -272,9 +315,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_title_articles" />
+                app:layout_constraintTop_toBottomOf="@id/tv_title_articles"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <!-- LOADING ANIM FOR ARTICLES -->
             <ProgressBar

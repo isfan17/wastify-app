@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bangkit.wastify.data.model.Type
 import com.bangkit.wastify.databinding.ItemTypeBinding
+import com.bumptech.glide.Glide
 
 class TypeAdapter(
     val onItemClicked: (Type) -> Unit
@@ -24,9 +25,11 @@ class TypeAdapter(
     inner class TypeViewHolder(private val binding: ItemTypeBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Type) {
-            binding.ivTypeIcon.setImageResource(data.icon)
+            Glide.with(itemView)
+                .load(data.icon)
+                .into(binding.ivTypeIcon)
             binding.tvTypeName.text = data.name
-            binding.root.setOnClickListener {  }
+            binding.root.setOnClickListener { onItemClicked.invoke(data) }
         }
     }
 

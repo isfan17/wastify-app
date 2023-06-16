@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.net.Uri
@@ -13,7 +14,6 @@ import android.os.Environment
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import com.bangkit.wastify.R
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -27,6 +27,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import com.bangkit.wastify.data.model.Result
 
 object Helper {
 
@@ -34,6 +35,13 @@ object Helper {
     fun isValidEmail(email: String): Boolean {
         val emailRegex = Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
         return emailRegex.matches(email)
+    }
+
+    // GET CURRENT FORMATTED DATE
+    fun getCurrentFormattedDate(): String {
+        val currentDate = Date()
+        val formatter = SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH)
+        return formatter.format(currentDate)
     }
 
     // TOAST FUNCTION SIMPLIFIED FOR FRAGMENT
@@ -102,6 +110,17 @@ object Helper {
         return File.createTempFile(timeStamp, ".jpg", storageDir)
     }
 
+    // CONVERT URI TO BITMAP
+    fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
+        try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            return BitmapFactory.decodeStream(inputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
     // CONVERT VECTOR TO BITMAP DESCRIPTOR
     fun vectorToBitmap(@DrawableRes id: Int, res: Resources): BitmapDescriptor {
         val vectorDrawable = ResourcesCompat.getDrawable(res, id, null)
@@ -144,4 +163,39 @@ object Helper {
             format.format(calendar.time)
         }
     }
+
+    fun hashMapToListOfString(hashMap: HashMap<String, String>): List<String> {
+        return hashMap.map { it.value }
+    }
+
+    fun formatListToString(strings: List<String>): String {
+        val stringBuilder = StringBuilder()
+
+        for (string in strings) {
+            stringBuilder.append("- $string\n")
+        }
+
+        return stringBuilder.toString().trimEnd()
+    }
+    fun countFoundCategories(identifications: List<Result>): String {
+        val categoryIdentificationStatus = HashMap<String, Boolean>()
+
+        // Iterate over the identifications and update the identification status
+        for (identification in identifications) {
+            val categoryId = identification.categoryId
+            categoryIdentificationStatus[categoryId] = true
+        }
+
+        // Count the number of found categories
+        var foundCategoriesCount = 0
+        for (status in categoryIdentificationStatus.values) {
+            if (status) {
+                foundCategoriesCount++
+            }
+        }
+
+        return foundCategoriesCount.toString()
+    }
+
+
 }

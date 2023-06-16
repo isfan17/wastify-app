@@ -1,0 +1,49 @@
+package com.bangkit.wastify.ui.screens.storage
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.bangkit.wastify.databinding.FragmentStorageBinding
+import com.bangkit.wastify.ui.adapters.StorageFragmentsAdapter
+import com.google.android.material.tabs.TabLayoutMediator
+
+class StorageFragment : Fragment() {
+
+    private var _binding: FragmentStorageBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var adapter: StorageFragmentsAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentStorageBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        adapter = StorageFragmentsAdapter(requireActivity())
+        binding.viewPager.adapter = adapter
+
+        // Attaching viewpager to tablayout
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = (binding.viewPager.adapter as StorageFragmentsAdapter).fragmentNames[position]
+        }.attach()
+
+        // Handling back btn
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}
