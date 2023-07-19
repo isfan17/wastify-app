@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -19,15 +20,12 @@ import com.bangkit.wastify.ui.adapters.ArticleCardAdapter
 import com.bangkit.wastify.ui.adapters.CategoryGridAdapter
 import com.bangkit.wastify.ui.adapters.TypeAdapter
 import com.bangkit.wastify.utils.CustomGridSpacing
-import com.bangkit.wastify.ui.viewmodels.AuthViewModel
-import com.bangkit.wastify.ui.viewmodels.MainViewModel
 import com.bangkit.wastify.utils.Helper.countFoundCategories
 import com.bangkit.wastify.utils.Helper.toast
 import com.bangkit.wastify.utils.UiState
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -37,8 +35,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val authViewModel: AuthViewModel by viewModels()
-    private val mainViewModel: MainViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
 
     private val typesAdapter by lazy {
         TypeAdapter(
@@ -97,24 +94,25 @@ class HomeFragment : Fragment() {
         setupArticlesRecyclerView()
 
         // Get Data
-        mainViewModel.getTypes()
-        mainViewModel.getCategories()
-        mainViewModel.getResults()
+        viewModel.getUserResults()
+        viewModel.getTypes()
+        viewModel.getCategories()
+        viewModel.getArticles()
 
         // Retrieve data
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
-                // User
+                // User Data
                 launch {
-                    authViewModel.userFlow.collectLatest {
+                    viewModel.userData.collectLatest {
                         setUserData(it)
                     }
                 }
 
-                // Total Results
+                // User Results
                 launch {
-                    mainViewModel.resultsFlow.collect {
+                    viewModel.userResults.collect {
                         if (it != null) {
                             when (it) {
                                 UiState.Loading -> showStatsLoading(true)
@@ -134,15 +132,12 @@ class HomeFragment : Fragment() {
 
                 // Types
                 launch {
-                    mainViewModel.typesFlow.collectLatest {
-                        if (it != null) {
-                            if (it.isNotEmpty()) typesAdapter.submitList(it)
-                            else mainViewModel.fetchTypes()
-                        }
+                    viewModel.types.collectLatest {
+                        if (it != null) typesAdapter.submitList(it)
                     }
                 }
                 launch {
-                    mainViewModel.fetchTypesFlow.collectLatest {
+                    viewModel.fetchTypesResult.collectLatest {
                         if (it != null) {
                             when (it) {
                                 UiState.Loading -> showTypesLoading(true)
@@ -160,15 +155,12 @@ class HomeFragment : Fragment() {
 
                 // Categories
                 launch {
-                    mainViewModel.categoriesFlow.collectLatest {
-                        if (it != null) {
-                            if (it.isNotEmpty()) categoriesAdapter.submitList(it)
-                            else mainViewModel.fetchCategories()
-                        }
+                    viewModel.categories.collectLatest {
+                        if (it != null) categoriesAdapter.submitList(it)
                     }
                 }
                 launch {
-                    mainViewModel.fetchCategoriesFlow.collectLatest {
+                    viewModel.fetchCategoriesResult.collectLatest {
                         if (it != null) {
                             when (it) {
                                 UiState.Loading -> showCategoriesLoading(true)
@@ -176,7 +168,9 @@ class HomeFragment : Fragment() {
                                     showCategoriesLoading(false)
                                     toast(it.error.toString())
                                 }
-                                is UiState.Success -> showCategoriesLoading(false)
+                                is UiState.Success -> {
+                                    showCategoriesLoading(false)
+                                }
                             }
                         }
                     }
@@ -184,8 +178,21 @@ class HomeFragment : Fragment() {
 
                 // Articles
                 launch {
-                    mainViewModel.articlesFlow.collectLatest {
-                        if (it != null) { articlesAdapter.submitList(it) }
+                    viewModel.articles.collectLatest {
+                        if (it != null) articlesAdapter.submitList(it)
+                    }
+                }
+                launch {
+                    viewModel.fetchArticlesResult.collectLatest {
+                        if (it != null) {
+                            when (it) {
+                                UiState.Loading -> showArticlesLoading(true)
+                                is UiState.Failure -> {
+                                    showArticlesLoading(false)
+                                }
+                                is UiState.Success -> showArticlesLoading(false)
+                            }
+                        }
                     }
                 }
             }
@@ -232,21 +239,52 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun showTypesLoading(state: Boolean) {
-        binding.progressBarType.visibility = if (state) View.VISIBLE else View.GONE
-    }
-
-    private fun showCategoriesLoading(state: Boolean) {
-        binding.progressBarCategory.visibility = if (state) View.VISIBLE else View.GONE
-    }
-
     private fun showStatsLoading(state: Boolean) {
         binding.progressBarStatOne.visibility = if (state) View.VISIBLE else View.GONE
         binding.progressBarStatTwo.visibility = if (state) View.VISIBLE else View.GONE
     }
 
+    private fun showTypesLoading(state: Boolean) {
+        if (state) {
+            binding.shimmerTypes.startShimmer()
+        } else {
+            binding.shimmerTypes.stopShimmer()
+            binding.shimmerTypes.setShimmer(null)
+            binding.shimmerTypes.visibility = View.GONE
+
+            val catTitleParams = binding.tvTitleWasteCategories.layoutParams as ConstraintLayout.LayoutParams
+            catTitleParams.topToBottom = binding.rvTypes.id
+            binding.tvTitleWasteCategories.requestLayout()
+
+            binding.rvTypes.visibility = View.VISIBLE
+        }
+    }
+
+    private fun showCategoriesLoading(state: Boolean) {
+        if (state) {
+            binding.shimmerCategories.startShimmer()
+        } else {
+            binding.shimmerCategories.stopShimmer()
+            binding.shimmerCategories.setShimmer(null)
+            binding.shimmerCategories.visibility = View.GONE
+
+            val artTitleParams = binding.tvTitleArticles.layoutParams as ConstraintLayout.LayoutParams
+            artTitleParams.topToBottom = binding.rvCategories.id
+            binding.tvTitleArticles.requestLayout()
+
+            binding.rvCategories.visibility = View.VISIBLE
+        }
+    }
+
     private fun showArticlesLoading(state: Boolean) {
-        binding.progressBarArticles.visibility = if (state) View.VISIBLE else View.GONE
+        if (state) {
+            binding.shimmerArticles.startShimmer()
+        } else {
+            binding.shimmerArticles.stopShimmer()
+            binding.shimmerArticles.setShimmer(null)
+            binding.shimmerArticles.visibility = View.GONE
+            binding.rvArticles.visibility = View.VISIBLE
+        }
     }
 
     override fun onDestroyView() {

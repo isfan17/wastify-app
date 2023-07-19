@@ -1,19 +1,29 @@
 package com.bangkit.wastify.data.model
 
 import android.os.Parcelable
-import androidx.annotation.DrawableRes
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.bangkit.wastify.data.db.entities.ArticleEntity
+import com.bangkit.wastify.utils.Helper.convertDateStringToMillis
 import kotlinx.parcelize.Parcelize
 
-@Entity(tableName = "articles")
 @Parcelize
 data class Article(
-    @PrimaryKey
     var id: String,
-    @DrawableRes val image: Int,
+    val image: String,
     val title: String,
     val source: String,
     val publishedAt: String,
-    val description: String
+    val description: String,
+    var isBookmarked: Boolean,
 ): Parcelable
+
+fun Article.asEntityModel(): ArticleEntity {
+    return ArticleEntity(
+        id = this.id,
+        image = this.image,
+        title = this.title,
+        source = this.source,
+        publishedAtMillis = convertDateStringToMillis(this.publishedAt),
+        description = this.description,
+        isBookmarked = this.isBookmarked,
+    )
+}

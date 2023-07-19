@@ -1,4 +1,4 @@
-package com.bangkit.wastify.ui.screens.storage
+package com.bangkit.wastify.ui.screens.bookmarks
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.bangkit.wastify.databinding.FragmentStorageBinding
+import com.bangkit.wastify.databinding.FragmentBookmarksBinding
 import com.bangkit.wastify.ui.adapters.StorageFragmentsAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
-class StorageFragment : Fragment() {
+class BookmarksFragment : Fragment() {
 
-    private var _binding: FragmentStorageBinding? = null
+    private var _binding: FragmentBookmarksBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var adapter: StorageFragmentsAdapter
@@ -22,7 +22,7 @@ class StorageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentStorageBinding.inflate(inflater, container, false)
+        _binding = FragmentBookmarksBinding.inflate(inflater, container, false)
         return binding.root
     }
 

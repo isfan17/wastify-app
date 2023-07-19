@@ -1,15 +1,22 @@
 package com.bangkit.wastify.data.model
 
 import android.os.Parcelable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.bangkit.wastify.data.db.entities.UserEntity
 import kotlinx.parcelize.Parcelize
-@Entity(tableName = "users")
+
 @Parcelize
 data class User(
-    @PrimaryKey
     var id: String,
     val name: String,
     val email: String,
-    var imageUrl: String? = null
+    var imageUrl: String? = null,
 ): Parcelable
+
+fun User.asEntityModel(): UserEntity {
+    return UserEntity(
+        id = this.id,
+        name = this.name,
+        email = this.email,
+        imageUrl = this.imageUrl,
+    )
+}

@@ -12,7 +12,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bangkit.wastify.R
 import com.bangkit.wastify.databinding.FragmentLoginBinding
-import com.bangkit.wastify.ui.viewmodels.AuthViewModel
 import com.bangkit.wastify.ui.components.LoadingDialog
 import com.bangkit.wastify.utils.Helper.toast
 import com.bangkit.wastify.utils.UiState
@@ -25,7 +24,7 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private val authViewModel: AuthViewModel by viewModels()
+    private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +42,7 @@ class LoginFragment : Fragment() {
         // Validating login result
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.loginFlow.collect { state ->
+                viewModel.loginFlow.collect { state ->
                     if (state != null) {
                         when (state) {
                             UiState.Loading -> loadingDialog.show()
@@ -86,7 +85,7 @@ class LoginFragment : Fragment() {
             emailEntry.isEmpty() -> binding.edtEmail.error = getString(R.string.msg_field_required)
             passwordEntry.isEmpty() -> binding.edtPassword.error = getString(R.string.msg_field_required)
 
-            else -> authViewModel.login(emailEntry, passwordEntry)
+            else -> viewModel.login(emailEntry, passwordEntry)
         }
     }
 

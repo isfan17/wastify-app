@@ -34,6 +34,7 @@
     <string name="waste_category">Waste Category</string>
     <string name="description">Description</string>
     <string name="waste_identified">Waste Identified</string>
+    <string name="waste_category_details">Waste Category Details</string>
     <string name="categories_found">Categories Found</string>
     <string name="welcome_to_wastify">Welcome to Wastify</string>
 
@@ -133,5 +134,9 @@
     <string name="show_my_location">Show My Location</string>
     <string name="msg_activate_gps">Activate your gps, and click the top right button in the map to jump to your current location</string>
     <string name="more_accurate_result">More Accurate Result</string>
+    <string name="msg_article_saved">Article added to bookmarks.</string>
+    <string name="msg_article_deleted">Article deleted from bookmarks.</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="tab_layout_bookmarks">Tab Layout Bookmarks</string>
 
 </resources>

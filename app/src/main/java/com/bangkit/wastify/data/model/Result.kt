@@ -1,11 +1,9 @@
 package com.bangkit.wastify.data.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.bangkit.wastify.data.db.entities.ResultEntity
+import com.bangkit.wastify.utils.Helper.convertDateStringToMillis
 
-@Entity(tableName = "results")
 data class Result(
-    @PrimaryKey
     val imageUrl: String,
     val name: String,
     val percentage: Double,
@@ -14,3 +12,15 @@ data class Result(
     val recyclable: Boolean,
     val createdAt: String
 )
+
+fun Result.asEntityModel(): ResultEntity {
+    return ResultEntity(
+        imageUrl = this.imageUrl,
+        name = this.name,
+        percentage = this.percentage,
+        createdAtMillis = convertDateStringToMillis(this.createdAt),
+        typeId = this.typeId,
+        categoryId = this.categoryId,
+        recyclable = this.recyclable,
+    )
+}

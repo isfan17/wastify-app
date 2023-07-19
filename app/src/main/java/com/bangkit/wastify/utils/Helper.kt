@@ -28,6 +28,8 @@ import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import com.bangkit.wastify.data.model.Result
+import com.facebook.shimmer.Shimmer
+import com.facebook.shimmer.ShimmerDrawable
 
 object Helper {
 
@@ -42,6 +44,21 @@ object Helper {
         val currentDate = Date()
         val formatter = SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH)
         return formatter.format(currentDate)
+    }
+
+    // CONVERT DATE IN MILLIS TO STRING
+    fun convertDateMillisToString(timeMillis: Long): String {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = timeMillis
+        val formatter = SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH)
+        return formatter.format(calendar.time)
+    }
+
+    // CONVERT DATE IN STRING TO MILLIS
+    fun convertDateStringToMillis(dateString: String): Long {
+        val sdf = SimpleDateFormat("dd MMMM, yyyy", Locale.getDefault())
+        val date = sdf.parse(dateString)
+        return date?.time ?: 0L
     }
 
     // TOAST FUNCTION SIMPLIFIED FOR FRAGMENT
@@ -164,19 +181,6 @@ object Helper {
         }
     }
 
-    fun hashMapToListOfString(hashMap: HashMap<String, String>): List<String> {
-        return hashMap.map { it.value }
-    }
-
-    fun formatListToString(strings: List<String>): String {
-        val stringBuilder = StringBuilder()
-
-        for (string in strings) {
-            stringBuilder.append("- $string\n")
-        }
-
-        return stringBuilder.toString().trimEnd()
-    }
     fun countFoundCategories(identifications: List<Result>): String {
         val categoryIdentificationStatus = HashMap<String, Boolean>()
 
@@ -197,5 +201,19 @@ object Helper {
         return foundCategoriesCount.toString()
     }
 
+    fun solution(S: String): Int {
+        // Implement your solution here
+        var V = S.toInt(2)
+        var totalOps = 0
 
+        while (V > 0) {
+            if (V % 2 == 0)
+                V /= 2
+            else
+                V -= 1
+            totalOps++
+        }
+
+        return totalOps
+    }
 }

@@ -19,7 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.bangkit.wastify.R
 import com.bangkit.wastify.data.model.User
 import com.bangkit.wastify.databinding.FragmentEditProfileBinding
-import com.bangkit.wastify.ui.viewmodels.AuthViewModel
+import com.bangkit.wastify.ui.screens.auth.AuthViewModel
 import com.bangkit.wastify.utils.Helper.isValidEmail
 import com.bangkit.wastify.utils.Helper.toast
 import com.bangkit.wastify.utils.UiState

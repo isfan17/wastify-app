@@ -2,8 +2,8 @@ package com.bangkit.wastify.ui.adapters
 
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.bangkit.wastify.ui.screens.storage.SavedResultsFragment
-import com.bangkit.wastify.ui.screens.storage.SavedArticlesFragment
+import com.bangkit.wastify.ui.screens.bookmarks.SavedResultsFragment
+import com.bangkit.wastify.ui.screens.bookmarks.SavedArticlesFragment
 
 class StorageFragmentsAdapter(
     fa: FragmentActivity

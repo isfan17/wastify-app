@@ -15,6 +15,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class AppModule {
+
     @Provides
     @Singleton
     fun provideSharedPreferences(@ApplicationContext app: Context): SharedPreferences =

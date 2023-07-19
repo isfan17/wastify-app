@@ -1,26 +1,23 @@
 package com.bangkit.wastify.data.network
 
-import com.bangkit.wastify.data.model.Type
-import com.bangkit.wastify.utils.Helper
+import com.bangkit.wastify.data.db.entities.TypeEntity
 
 data class FirebaseType(
     var id: String? = null,
-    val namet: String? = null,
-    val icont: String? = null,
-    val imgt: String? = null,
-    val desct: String? = null,
-    val cat: HashMap<String, String>? = null
+    val name: String? = null,
+    val icon: String? = null,
+    val image: String? = null,
+    val description: String? = null,
 )
 
-fun List<FirebaseType>.asDomainModel(): List<Type> {
+fun List<FirebaseType>.asEntityModel(): List<TypeEntity> {
     return map {
-        Type(
+        TypeEntity(
             id = it.id!!,
-            name = it.namet!!,
-            icon = it.icont!!,
-            image = it.imgt!!,
-            description = it.desct!!,
-            categories = Helper.hashMapToListOfString(it.cat!!)
+            name = it.name!!,
+            icon = it.icon!!,
+            image = it.image!!,
+            description = it.description!!,
         )
     }
 }

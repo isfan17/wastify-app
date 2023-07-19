@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bangkit.wastify.data.model.Article
 import com.bangkit.wastify.databinding.ItemCardArticleBinding
+import com.bumptech.glide.Glide
 
 class ArticleCardAdapter(
     val onItemClicked: (Article) -> Unit
@@ -24,7 +25,9 @@ class ArticleCardAdapter(
     inner class ArticleCardViewHolder(private val binding: ItemCardArticleBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Article) {
-            binding.ivArticle.setImageResource(data.image)
+            Glide.with(itemView)
+                .load(data.image)
+                .into(binding.ivArticle)
             binding.tvTitle.text = data.title
             binding.tvSource.text = data.source
             binding.tvPublishedAt.text = data.publishedAt

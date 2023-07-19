@@ -10,7 +10,7 @@ import com.bangkit.wastify.databinding.ItemTypeBinding
 import com.bumptech.glide.Glide
 
 class TypeAdapter(
-    val onItemClicked: (Type) -> Unit
+    val onItemClicked: (Type) -> Unit,
 ): ListAdapter<Type, TypeAdapter.TypeViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeViewHolder {
@@ -22,7 +22,7 @@ class TypeAdapter(
         holder.bind(getItem(position))
     }
 
-    inner class TypeViewHolder(private val binding: ItemTypeBinding)
+    inner class TypeViewHolder(val binding: ItemTypeBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Type) {
             Glide.with(itemView)

@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.bangkit.wastify.R
 import com.bangkit.wastify.data.model.User
 import com.bangkit.wastify.databinding.FragmentSettingsBinding
-import com.bangkit.wastify.ui.viewmodels.AuthViewModel
+import com.bangkit.wastify.ui.screens.auth.AuthViewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,7 +49,7 @@ class SettingsFragment : Fragment() {
 
         // Do logout process
         binding.btnLogout.setOnClickListener { _ ->
-            context?.let { it ->
+            context?.let {
                 MaterialAlertDialogBuilder(it)
                     .setTitle(getString(R.string.logout))
                     .setMessage(getString(R.string.msg_logout))

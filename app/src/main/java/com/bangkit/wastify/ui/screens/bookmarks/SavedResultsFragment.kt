@@ -1,4 +1,4 @@
-package com.bangkit.wastify.ui.screens.storage
+package com.bangkit.wastify.ui.screens.bookmarks
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

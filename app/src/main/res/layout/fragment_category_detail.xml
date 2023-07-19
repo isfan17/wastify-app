@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screens.home.CategoryDetailFragment">
+    android:background="@color/green"
+    tools:context=".ui.screens.home.categorydetail.CategoryDetailFragment">
 
-    <ImageView
+    <Button
+        style="?attr/materialIconButtonStyle"
         android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:contentDescription="@string/back"
-        android:src="@drawable/ic_arrow_back_filled_24"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:icon="@drawable/ic_arrow_back_filled_24"
+        app:iconTint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,77 +23,74 @@
         android:id="@+id/tv_page_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/category_detail"
-        android:textColor="@color/black"
+        android:text="@string/waste_category_details"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/btn_back"
-        app:layout_constraintStart_toEndOf="@id/btn_back"
         app:layout_constraintTop_toTopOf="@id/btn_back" />
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider_app_bar"
+    <View
+        android:id="@+id/bg_content"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/custom_card_rounded_top_filled_white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_back" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_category_icon"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_category"
-        android:layout_width="0dp"
-        android:layout_height="156dp"
-        android:layout_marginHorizontal="16dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_category_icon"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_marginTop="16dp"
-        android:contentDescription="@string/waste_category"
-        android:scaleType="centerCrop"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize8dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider_app_bar"
-        tools:src="@tools:sample/backgrounds/scenic"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_back"
+        app:civ_border_width="8dp"
+        app:civ_border_color="@color/white"
+        tools:src="@tools:sample/avatars"/>
 
     <TextView
         android:id="@+id/tv_category_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:paddingVertical="8dp"
-        android:paddingHorizontal="12dp"
-        android:background="@drawable/custom_card_rounded_filled_primary"
-        android:text="@string/category"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_category" />
-
-    <TextView
-        android:id="@+id/tv_title_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp"
-        android:text="@string/description"
+        android:textSize="24sp"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_category_name" />
+        app:layout_constraintTop_toBottomOf="@id/iv_category_icon"
+        tools:text="@string/category" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_category_image"
+        android:layout_width="0dp"
+        android:layout_height="156dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/waste_category"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_category_name"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize8dp"
+        tools:src="@tools:sample/backgrounds/scenic" />
 
     <TextView
         android:id="@+id/tv_category_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/tv_title_description"
-        app:layout_constraintEnd_toEndOf="@id/tv_title_description"
-        app:layout_constraintTop_toBottomOf="@id/tv_title_description"
-        tools:text="@string/dummy_description"/>
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_category_image"
+        tools:text="@string/dummy_description" />
 
     <TextView
         android:id="@+id/tv_title_methods"

@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.bangkit.wastify.R
 import com.bangkit.wastify.databinding.FragmentForgotPasswordBinding
 import com.bangkit.wastify.ui.components.LoadingDialog
-import com.bangkit.wastify.ui.viewmodels.AuthViewModel
 import com.bangkit.wastify.utils.Helper
 import com.bangkit.wastify.utils.Helper.toast
 import com.bangkit.wastify.utils.UiState
@@ -26,7 +25,7 @@ class ForgotPasswordFragment : Fragment() {
     private var _binding: FragmentForgotPasswordBinding? = null
     private val binding get() = _binding!!
 
-    private val authViewModel: AuthViewModel by viewModels()
+    private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +43,7 @@ class ForgotPasswordFragment : Fragment() {
         // Validating forgot password result
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.forgotPasswordFlow.collect { state ->
+                viewModel.forgotPasswordFlow.collect { state ->
                     if (state != null) {
                         when (state) {
                             UiState.Loading -> loadingDialog.show()
@@ -78,7 +77,7 @@ class ForgotPasswordFragment : Fragment() {
         when {
             emailEntry.isEmpty() -> binding.edtEmail.error = getString(R.string.msg_field_required)
             !Helper.isValidEmail(emailEntry) -> binding.edtEmail.error = getString(R.string.msg_input_valid_email)
-            else -> authViewModel.forgotPassword(emailEntry)
+            else -> viewModel.forgotPassword(emailEntry)
         }
     }
 

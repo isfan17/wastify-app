@@ -1,4 +1,4 @@
-package com.bangkit.wastify.ui.screens.home
+package com.bangkit.wastify.ui.screens.home.articledetail
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,8 +14,8 @@ import androidx.navigation.fragment.navArgs
 import com.bangkit.wastify.R
 import com.bangkit.wastify.data.model.Article
 import com.bangkit.wastify.databinding.FragmentArticleDetailBinding
-import com.bangkit.wastify.ui.viewmodels.MainViewModel
 import com.bangkit.wastify.utils.Helper.toast
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ class ArticleDetailFragment : Fragment() {
     private var _binding: FragmentArticleDetailBinding? = null
     private val binding get() = _binding!!
 
-    private val mainViewModel: MainViewModel by viewModels()
+    private val viewModel: ArticleDetailViewModel by viewModels()
     private val navArgs: ArticleDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -42,10 +42,10 @@ class ArticleDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Retrieve article data
-        mainViewModel.getArticleById(navArgs.articleId)
+        viewModel.getArticle(navArgs.articleId)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.articleFlow.collectLatest {
+                viewModel.article.collectLatest {
                     if (it != null) { bind(it) }
                 }
             }
@@ -55,18 +55,28 @@ class ArticleDetailFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
-
-        binding.btnSave.setOnClickListener {
-            toast(getString(R.string.msg_feature_under_development))
-        }
     }
 
     private fun bind(article: Article) {
-        binding.ivArticle.setImageResource(article.image)
+        Glide.with(this)
+            .load(article.image)
+            .placeholder(R.drawable.waste_placeholder)
+            .into(binding.ivArticle)
         binding.tvArticleTitle.text = article.title
         binding.tvArticleSource.text = article.source
         binding.tvArticlePublishedAt.text = article.publishedAt
         binding.tvArticleDescription.text = article.description
+        binding.btnSave.isChecked = article.isBookmarked
+
+        binding.btnSave.setOnClickListener {
+            if (binding.btnSave.isChecked) {
+                viewModel.deleteArticle(article)
+                toast(getString(R.string.msg_article_saved))
+            } else {
+                viewModel.saveArticle(article)
+                toast(getString(R.string.msg_article_deleted))
+            }
+        }
     }
 
     override fun onDestroyView() {

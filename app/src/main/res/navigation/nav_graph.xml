@@ -194,7 +194,7 @@
 
     <fragment
         android:id="@+id/categoryDetailFragment"
-        android:name="com.bangkit.wastify.ui.screens.home.CategoryDetailFragment"
+        android:name="com.bangkit.wastify.ui.screens.home.categorydetail.CategoryDetailFragment"
         android:label="fragment_category_detail"
         tools:layout="@layout/fragment_category_detail" >
         <argument
@@ -204,13 +204,13 @@
 
     <fragment
         android:id="@+id/historyFragment"
-        android:name="com.bangkit.wastify.ui.screens.storage.StorageFragment"
+        android:name="com.bangkit.wastify.ui.screens.bookmarks.BookmarksFragment"
         android:label="fragment_history"
-        tools:layout="@layout/fragment_storage" />
+        tools:layout="@layout/fragment_bookmarks" />
 
     <fragment
         android:id="@+id/articleDetailFragment"
-        android:name="com.bangkit.wastify.ui.screens.home.ArticleDetailFragment"
+        android:name="com.bangkit.wastify.ui.screens.home.articledetail.ArticleDetailFragment"
         android:label="fragment_article_detail"
         tools:layout="@layout/fragment_article_detail">
         <argument
@@ -287,11 +287,18 @@
     </fragment>
     <fragment
         android:id="@+id/typeDetailFragment"
-        android:name="com.bangkit.wastify.ui.screens.home.TypeDetailFragment"
+        android:name="com.bangkit.wastify.ui.screens.home.typedetail.TypeDetailFragment"
         android:label="fragment_type_detail"
         tools:layout="@layout/fragment_type_detail" >
         <argument
             android:name="type_id"
             app:argType="string" />
+        <action
+            android:id="@+id/action_typeDetailFragment_to_categoryDetailFragment"
+            app:destination="@id/categoryDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 </navigation>

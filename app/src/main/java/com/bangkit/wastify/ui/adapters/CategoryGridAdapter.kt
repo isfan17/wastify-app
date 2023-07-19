@@ -10,7 +10,7 @@ import com.bangkit.wastify.databinding.ItemCategoryBinding
 import com.bumptech.glide.Glide
 
 class CategoryGridAdapter(
-    val onItemClicked: (Category) -> Unit
+    val onItemClicked: (Category) -> Unit,
 ): ListAdapter<Category, CategoryGridAdapter.CategoryViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
@@ -22,7 +22,7 @@ class CategoryGridAdapter(
         holder.bind(getItem(position))
     }
 
-    inner class CategoryViewHolder(private val binding: ItemCategoryBinding)
+    inner class CategoryViewHolder(val binding: ItemCategoryBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Category) {
             Glide.with(itemView)

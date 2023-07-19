@@ -9,7 +9,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bangkit.wastify.R
 import com.bangkit.wastify.databinding.ActivityMainBinding
+import com.bangkit.wastify.utils.Helper
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

@@ -1,26 +1,23 @@
 package com.bangkit.wastify.data.repositories.main
 
-import android.graphics.Bitmap
 import com.bangkit.wastify.data.model.Article
 import com.bangkit.wastify.data.model.Category
-import com.bangkit.wastify.data.model.Identification
+import com.bangkit.wastify.data.model.CategoryAndMethods
 import com.bangkit.wastify.data.model.Type
+import com.bangkit.wastify.data.model.TypeAndCategories
 import com.bangkit.wastify.utils.UiState
 import kotlinx.coroutines.flow.Flow
-import com.bangkit.wastify.data.model.Result
 
 interface MainRepository {
     suspend fun getTypes(): Flow<List<Type>>
     suspend fun getCategories(): Flow<List<Category>>
-    fun getArticles(): Flow<List<Article>>
-    suspend fun fetchCategories(): UiState<String>
+    suspend fun getArticles(): Flow<List<Article>>
+
     suspend fun fetchTypes(): UiState<String>
+    suspend fun fetchCategories(): UiState<String>
+    suspend fun fetchArticles(): UiState<String>
 
-    suspend fun getTypeById(id: String): Flow<Type>
-    suspend fun getCategoryById(id: String): Flow<Category>
-    suspend fun getArticleById(id: String): Flow<Article>
-
-    suspend fun getResults(): Flow<UiState<List<Result>>>
-    suspend fun storeResult(identification: Identification): UiState<String>
-    suspend fun classifyWaste(image: Bitmap): UiState<Identification>
+    suspend fun getType(id: String): Flow<TypeAndCategories>
+    suspend fun getCategory(id: String): Flow<CategoryAndMethods>
+    suspend fun getArticle(id: String): Flow<Article>
 }

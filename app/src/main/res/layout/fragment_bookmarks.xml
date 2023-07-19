@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screens.storage.StorageFragment">
+    tools:context=".ui.screens.bookmarks.BookmarksFragment">
 
     <!-- BUTTON BACK -->
     <ImageView
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="@string/storage"
+        android:text="@string/bookmarks"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -50,18 +50,19 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/custom_tab_rect"
-        android:contentDescription="@string/tab_layout_history"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider_app_bar"
+        android:contentDescription="@string/tab_layout_bookmarks"
+        app:tabMode="fixed"
         app:tabIndicator="@drawable/custom_tab_indicator"
+        app:tabIndicatorFullWidth="true"
         app:tabIndicatorAnimationMode="elastic"
         app:tabIndicatorColor="@null"
         app:tabIndicatorGravity="stretch"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/white"
         app:tabTextAppearance="@style/TabLayoutText"
-        app:tabTextColor="@color/green" />
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="@color/green"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_app_bar"/>
 
     <!-- PAGE CONTAINER -->
     <androidx.viewpager2.widget.ViewPager2

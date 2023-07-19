@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -30,7 +31,7 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_app_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_app_name"
-        app:srcCompat="@drawable/ic_settings_outline_24_primary" />
+        app:srcCompat="@drawable/ic_settings_filled_24_primary" />
 
     <!-- BUTTON HISTORY -->
     <ImageView
@@ -242,21 +243,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:overScrollMode="never"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_title_waste_types" />
 
-            <!-- LOADING ANIM FOR TYPES -->
-            <ProgressBar
-                android:id="@+id/progress_bar_type"
-                android:layout_width="wrap_content"
+            <!-- TYPES LOADING ANIM -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_types"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/rv_types"
-                app:layout_constraintEnd_toEndOf="@id/rv_types"
-                app:layout_constraintStart_toStartOf="@id/rv_types"
-                app:layout_constraintTop_toTopOf="@id/rv_types" />
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_waste_types"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <include layout="@layout/item_type_shimmer" />
+                    <include layout="@layout/item_type_shimmer" />
+                    <include layout="@layout/item_type_shimmer" />
+                    <include layout="@layout/item_type_shimmer" />
+                    <include layout="@layout/item_type_shimmer" />
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <!-- TEXT TITLE WASTE CATEGORIES -->
             <TextView
@@ -270,7 +282,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_types" />
+                app:layout_constraintTop_toBottomOf="@id/shimmer_types" />
 
             <!-- RECYCLERVIEW WASTE CATEGORIES -->
             <androidx.recyclerview.widget.RecyclerView
@@ -279,21 +291,48 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:overScrollMode="never"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_title_waste_categories" />
 
-            <!-- LOADING ANIM FOR CATEGORIES -->
-            <ProgressBar
-                android:id="@+id/progress_bar_category"
-                android:layout_width="wrap_content"
+            <!-- CATEGORIES LOADING ANIM -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_categories"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/rv_categories"
-                app:layout_constraintEnd_toEndOf="@id/rv_categories"
-                app:layout_constraintStart_toStartOf="@id/rv_categories"
-                app:layout_constraintTop_toTopOf="@id/rv_categories" />
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_waste_categories"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <include layout="@layout/item_category_shimmer" />
+                        <include layout="@layout/item_category_shimmer" />
+                        <include layout="@layout/item_category_shimmer" />
+                        <include layout="@layout/item_category_shimmer" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp">
+                        <include layout="@layout/item_category_shimmer" />
+                        <include layout="@layout/item_category_shimmer" />
+                        <include layout="@layout/item_category_shimmer" />
+                        <include layout="@layout/item_category_shimmer" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <!-- TEXT TITLE RELATED ARTICLES -->
             <TextView
@@ -307,7 +346,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_categories" />
+                app:layout_constraintTop_toBottomOf="@id/shimmer_categories" />
 
             <!-- RECYCLERVIEW RELATED ARTICLES -->
             <androidx.recyclerview.widget.RecyclerView
@@ -316,21 +355,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_title_articles"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <!-- LOADING ANIM FOR ARTICLES -->
-            <ProgressBar
-                android:id="@+id/progress_bar_articles"
-                android:layout_width="wrap_content"
+            <!-- ARTICLES LOADING ANIM -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_articles"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/rv_articles"
-                app:layout_constraintEnd_toEndOf="@id/rv_articles"
-                app:layout_constraintStart_toStartOf="@id/rv_articles"
-                app:layout_constraintTop_toTopOf="@id/rv_articles" />
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_articles"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <include layout="@layout/item_card_article_shimmer" />
+                    <include layout="@layout/item_card_article_shimmer" />
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

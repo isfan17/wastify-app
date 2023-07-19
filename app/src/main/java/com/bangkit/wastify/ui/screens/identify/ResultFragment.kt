@@ -75,64 +75,64 @@ class ResultFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
-                launch {
-                    mainViewModel.typeFlow.collectLatest { type ->
-                        if (type != null) {
-                            Glide.with(this@ResultFragment)
-                                .load(type.icon)
-                                .into(binding.ivType)
-                            binding.tvType.text = type.name
-
-                            binding.ivType.setOnClickListener {
-                                val action = ResultFragmentDirections.actionResultFragmentToTypeDetailFragment(type.id)
-                                findNavController().navigate(action)
-                            }
-                        }
-                    }
-                }
-
-                launch {
-                    mainViewModel.categoryFlow.collectLatest { category ->
-                        if (category != null) {
-                            Glide.with(this@ResultFragment)
-                                .load(category.icon)
-                                .into(binding.ivCategory)
-                            binding.tvCategory.text = category.name
-
-                            binding.ivCategory.setOnClickListener {
-                                val action = ResultFragmentDirections.actionResultFragmentToCategoryDetailFragment(category.id)
-                                findNavController().navigate(action)
-                            }
-                        }
-                    }
-                }
-
-                launch {
-                    mainViewModel.identificationFlow.collectLatest { state ->
-                        if (state != null) {
-                            when (state) {
-                                UiState.Loading -> showLoading(true)
-                                is UiState.Failure -> {
-                                    showLoading(false)
-                                    toast(state.error.toString())
-                                }
-                                is UiState.Success -> {
-                                    result = state.data
-                                    showLoading(false)
-                                    binding.ivResult.setImageBitmap(state.data.image)
-
-                                    mainViewModel.getTypeById(state.data.typeId)
-                                    mainViewModel.getCategoryById(state.data.categoryId)
-
-                                    binding.tvRecyclable.text = if (state.data.recyclable) getString(R.string.yes) else getString(R.string.no)
-                                    binding.ivRecyclable.setImageResource(
-                                        if (state.data.recyclable) R.drawable.recyclable_yes else R.drawable.recyclable_no
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
+//                launch {
+//                    mainViewModel.typeFlow.collectLatest { type ->
+//                        if (type != null) {
+//                            Glide.with(this@ResultFragment)
+//                                .load(type.icon)
+//                                .into(binding.ivType)
+//                            binding.tvType.text = type.name
+//
+//                            binding.ivType.setOnClickListener {
+//                                val action = ResultFragmentDirections.actionResultFragmentToTypeDetailFragment(type.id)
+//                                findNavController().navigate(action)
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                launch {
+//                    mainViewModel.categoryFlow.collectLatest { category ->
+//                        if (category != null) {
+//                            Glide.with(this@ResultFragment)
+//                                .load(category.icon)
+//                                .into(binding.ivCategory)
+//                            binding.tvCategory.text = category.name
+//
+//                            binding.ivCategory.setOnClickListener {
+//                                val action = ResultFragmentDirections.actionResultFragmentToCategoryDetailFragment(category.id)
+//                                findNavController().navigate(action)
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                launch {
+//                    mainViewModel.identificationFlow.collectLatest { state ->
+//                        if (state != null) {
+//                            when (state) {
+//                                UiState.Loading -> showLoading(true)
+//                                is UiState.Failure -> {
+//                                    showLoading(false)
+//                                    toast(state.error.toString())
+//                                }
+//                                is UiState.Success -> {
+//                                    result = state.data
+//                                    showLoading(false)
+//                                    binding.ivResult.setImageBitmap(state.data.image)
+//
+//                                    mainViewModel.getTypeById(state.data.typeId)
+//                                    mainViewModel.getCategoryById(state.data.categoryId)
+//
+//                                    binding.tvRecyclable.text = if (state.data.recyclable) getString(R.string.yes) else getString(R.string.no)
+//                                    binding.ivRecyclable.setImageResource(
+//                                        if (state.data.recyclable) R.drawable.recyclable_yes else R.drawable.recyclable_no
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
 
                 launch {
                     mainViewModel.saveResultFlow.collectLatest {

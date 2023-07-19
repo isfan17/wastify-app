@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.bangkit.wastify.R
 import com.bangkit.wastify.databinding.FragmentRegisterBinding
 import com.bangkit.wastify.ui.components.LoadingDialog
-import com.bangkit.wastify.ui.viewmodels.AuthViewModel
 import com.bangkit.wastify.utils.Helper.isValidEmail
 import com.bangkit.wastify.utils.Helper.toast
 import com.bangkit.wastify.utils.UiState
@@ -26,7 +25,7 @@ class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private val authViewModel: AuthViewModel by viewModels()
+    private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +43,7 @@ class RegisterFragment : Fragment() {
         // Validating register result
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.registerFlow.collect { state ->
+                viewModel.registerFlow.collect { state ->
                     if (state != null) {
                         when(state) {
                             UiState.Loading -> loadingDialog.show()
@@ -90,7 +89,7 @@ class RegisterFragment : Fragment() {
             confirmPasswordEntry != passwordEntry -> binding.edtConfirmPassword.error = getString(R.string.msg_passwords_not_match)
             !isValidEmail(emailEntry) -> binding.edtEmail.error = getString(R.string.msg_input_valid_email)
 
-            else -> authViewModel.register(nameEntry, emailEntry, passwordEntry)
+            else -> viewModel.register(nameEntry, emailEntry, passwordEntry)
         }
     }
 

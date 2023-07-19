@@ -102,6 +102,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.15.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Timber for Debugging
     implementation 'com.jakewharton.timber:timber:4.7.1'
