@@ -1,8 +1,6 @@
 package com.bangkit.wastify.data.network
 
 import com.bangkit.wastify.data.db.entities.CategoryEntity
-import com.bangkit.wastify.data.model.Category
-import com.bangkit.wastify.utils.Helper
 
 data class FirebaseCategory(
     var id: String? = null,

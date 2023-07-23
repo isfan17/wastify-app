@@ -2,6 +2,7 @@ package com.bangkit.wastify.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.bangkit.wastify.data.db.dao.ArticleDao
 import com.bangkit.wastify.data.db.dao.CategoryDao
 import com.bangkit.wastify.data.db.dao.DisposalMethodDao
@@ -21,11 +22,12 @@ import com.bangkit.wastify.data.db.entities.UserEntity
         TypeEntity::class,
         CategoryEntity::class,
         ArticleEntity::class,
-        ResultEntity::class,
         DisposalMethodEntity::class,
+        ResultEntity::class,
     ],
     version = 1
 )
+@TypeConverters(Converters::class)
 abstract class WastifyDatabase: RoomDatabase() {
 
     abstract fun getUserDao(): UserDao

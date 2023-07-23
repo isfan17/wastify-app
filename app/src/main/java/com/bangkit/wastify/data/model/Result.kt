@@ -1,26 +1,29 @@
 package com.bangkit.wastify.data.model
 
+import android.graphics.Bitmap
+import android.os.Parcelable
 import com.bangkit.wastify.data.db.entities.ResultEntity
 import com.bangkit.wastify.utils.Helper.convertDateStringToMillis
+import kotlinx.parcelize.Parcelize
 
-data class Result(
-    val imageUrl: String,
-    val name: String,
-    val percentage: Double,
+@Parcelize
+data class Result (
+    var id: Int? = null,
+    val image: Bitmap,
+    val classifications: List<Classification>,
     val typeId: String,
     val categoryId: String,
     val recyclable: Boolean,
-    val createdAt: String
-)
+    val createdAt: String,
+): Parcelable
 
 fun Result.asEntityModel(): ResultEntity {
     return ResultEntity(
-        imageUrl = this.imageUrl,
-        name = this.name,
-        percentage = this.percentage,
-        createdAtMillis = convertDateStringToMillis(this.createdAt),
+        image = this.image,
+        classifications = this.classifications,
         typeId = this.typeId,
         categoryId = this.categoryId,
         recyclable = this.recyclable,
+        createdAtMillis = convertDateStringToMillis(this.createdAt),
     )
 }

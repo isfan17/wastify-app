@@ -1,7 +1,6 @@
 package com.bangkit.wastify.utils
 
 import android.app.Application
-import android.content.ContentResolver
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -10,7 +9,7 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
+import android.util.Base64
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.content.res.ResourcesCompat
@@ -21,15 +20,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.libraries.places.api.model.LocalTime
 import com.google.android.libraries.places.api.model.OpeningHours
 import timber.log.Timber
+import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import com.bangkit.wastify.data.model.Result
-import com.facebook.shimmer.Shimmer
-import com.facebook.shimmer.ShimmerDrawable
+import kotlin.math.ceil
 
 object Helper {
 
@@ -42,7 +37,7 @@ object Helper {
     // GET CURRENT FORMATTED DATE
     fun getCurrentFormattedDate(): String {
         val currentDate = Date()
-        val formatter = SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH)
+        val formatter = SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH)
         return formatter.format(currentDate)
     }
 
@@ -50,13 +45,13 @@ object Helper {
     fun convertDateMillisToString(timeMillis: Long): String {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = timeMillis
-        val formatter = SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH)
+        val formatter = SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH)
         return formatter.format(calendar.time)
     }
 
     // CONVERT DATE IN STRING TO MILLIS
     fun convertDateStringToMillis(dateString: String): Long {
-        val sdf = SimpleDateFormat("dd MMMM, yyyy", Locale.getDefault())
+        val sdf = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
         val date = sdf.parse(dateString)
         return date?.time ?: 0L
     }
@@ -103,28 +98,6 @@ object Helper {
                 Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
             }
         }
-    }
-
-    // CONVERT URI TO FILE FORMAT
-    fun uriToFile(selectedImg: Uri, context: Context): File {
-        val contentResolver: ContentResolver = context.contentResolver
-        val myFile = createCustomTempFile(context)
-
-        val inputStream = contentResolver.openInputStream(selectedImg) as InputStream
-        val outputStream: OutputStream = FileOutputStream(myFile)
-        val buf = ByteArray(1024)
-        var len: Int
-        while (inputStream.read(buf).also { len = it } > 0) outputStream.write(buf, 0, len)
-        outputStream.close()
-        inputStream.close()
-
-        return myFile
-    }
-
-    // TEMP STORAGE FOR FILE
-    private fun createCustomTempFile(context: Context): File {
-        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(timeStamp, ".jpg", storageDir)
     }
 
     // CONVERT URI TO BITMAP
@@ -181,39 +154,26 @@ object Helper {
         }
     }
 
-    fun countFoundCategories(identifications: List<Result>): String {
-        val categoryIdentificationStatus = HashMap<String, Boolean>()
+    // CONVERT DOUBLE TO ROUND UP 2 DIGIT PERCENTAGE IN STRING FORMAT
+    fun doubleToPercentageString(value: Double): String {
+        // Convert the double value to a percentage with two decimal places
+        val percentage = value * 100
 
-        // Iterate over the identifications and update the identification status
-        for (identification in identifications) {
-            val categoryId = identification.categoryId
-            categoryIdentificationStatus[categoryId] = true
-        }
+        // Round up the percentage to the nearest integer
+        val roundedPercentage = ceil(percentage).toInt()
 
-        // Count the number of found categories
-        var foundCategoriesCount = 0
-        for (status in categoryIdentificationStatus.values) {
-            if (status) {
-                foundCategoriesCount++
-            }
-        }
-
-        return foundCategoriesCount.toString()
+        // Convert the rounded percentage to a string
+        return "$roundedPercentage%"
     }
 
-    fun solution(S: String): Int {
-        // Implement your solution here
-        var V = S.toInt(2)
-        var totalOps = 0
+    fun byteArrayStringToBitmap(bytesString: String): Bitmap {
+        val byteArray = Base64.decode(bytesString, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+    }
 
-        while (V > 0) {
-            if (V % 2 == 0)
-                V /= 2
-            else
-                V -= 1
-            totalOps++
-        }
-
-        return totalOps
+    fun bitmapToByteArrayString(bmp: Bitmap): String {
+        val outputStream = ByteArrayOutputStream()
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
     }
 }

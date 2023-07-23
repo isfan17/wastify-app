@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.bangkit.wastify.data.db.entities.ArticleEntity
-import com.bangkit.wastify.data.model.Article
 import kotlinx.coroutines.flow.Flow
 
 @Dao

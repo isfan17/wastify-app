@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screens.MainActivity">
+    tools:context=".ui.views.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
@@ -23,15 +23,14 @@
         android:id="@+id/btn_identify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="-28dp"
         android:backgroundTint="@color/green"
         android:contentDescription="@string/identify"
         app:srcCompat="@drawable/ic_identify_filled_24_white"
         app:tint="@color/white"
-        app:elevation="9dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav"/>
+        app:layout_constraintTop_toTopOf="@id/bottom_nav"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_nav"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

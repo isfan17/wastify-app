@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.bangkit.wastify.ui.screens.splash.SplashFragment"
+        android:name="com.bangkit.wastify.ui.views.splash.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
@@ -44,7 +44,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.bangkit.wastify.ui.screens.auth.LoginFragment"
+        android:name="com.bangkit.wastify.ui.views.auth.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -75,7 +75,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.bangkit.wastify.ui.screens.auth.RegisterFragment"
+        android:name="com.bangkit.wastify.ui.views.auth.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -92,13 +92,13 @@
 
     <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.bangkit.wastify.ui.screens.auth.ForgotPasswordFragment"
+        android:name="com.bangkit.wastify.ui.views.auth.ForgotPasswordFragment"
         android:label="fragment_forgot_password"
         tools:layout="@layout/fragment_forgot_password" />
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.bangkit.wastify.ui.screens.home.HomeFragment"
+        android:name="com.bangkit.wastify.ui.views.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -116,8 +116,8 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
         <action
-            android:id="@+id/action_homeFragment_to_historyFragment"
-            app:destination="@id/historyFragment"
+            android:id="@+id/action_homeFragment_to_bookmarksFragment"
+            app:destination="@id/bookmarksFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -147,13 +147,13 @@
 
     <fragment
         android:id="@+id/exploreFragment"
-        android:name="com.bangkit.wastify.ui.screens.explore.ExploreFragment"
+        android:name="com.bangkit.wastify.ui.views.explore.ExploreFragment"
         android:label="fragment_explore"
         tools:layout="@layout/fragment_explore" />
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.bangkit.wastify.ui.screens.settings.SettingsFragment"
+        android:name="com.bangkit.wastify.ui.views.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
@@ -177,7 +177,7 @@
 
     <fragment
         android:id="@+id/onBoardingContainerFragment"
-        android:name="com.bangkit.wastify.ui.screens.onboarding.OnBoardingContainerFragment"
+        android:name="com.bangkit.wastify.ui.views.onboarding.OnBoardingContainerFragment"
         android:label="fragment_on_boarding_container"
         tools:layout="@layout/fragment_on_boarding_container" >
         <action
@@ -194,7 +194,7 @@
 
     <fragment
         android:id="@+id/categoryDetailFragment"
-        android:name="com.bangkit.wastify.ui.screens.home.categorydetail.CategoryDetailFragment"
+        android:name="com.bangkit.wastify.ui.views.home.categorydetail.CategoryDetailFragment"
         android:label="fragment_category_detail"
         tools:layout="@layout/fragment_category_detail" >
         <argument
@@ -203,14 +203,29 @@
     </fragment>
 
     <fragment
-        android:id="@+id/historyFragment"
-        android:name="com.bangkit.wastify.ui.screens.bookmarks.BookmarksFragment"
-        android:label="fragment_history"
-        tools:layout="@layout/fragment_bookmarks" />
+        android:id="@+id/bookmarksFragment"
+        android:name="com.bangkit.wastify.ui.views.bookmarks.BookmarksFragment"
+        android:label="fragment_bookmarks"
+        tools:layout="@layout/fragment_bookmarks" >
+        <action
+            android:id="@+id/action_bookmarksFragment_to_resultFragment"
+            app:destination="@id/resultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_bookmarksFragment_to_articleDetailFragment"
+            app:destination="@id/articleDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
 
     <fragment
         android:id="@+id/articleDetailFragment"
-        android:name="com.bangkit.wastify.ui.screens.home.articledetail.ArticleDetailFragment"
+        android:name="com.bangkit.wastify.ui.views.home.articledetail.ArticleDetailFragment"
         android:label="fragment_article_detail"
         tools:layout="@layout/fragment_article_detail">
         <argument
@@ -219,7 +234,7 @@
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.bangkit.wastify.ui.screens.identify.CameraFragment"
+        android:name="com.bangkit.wastify.ui.views.identify.camera.CameraFragment"
         android:label="fragment_camera"
         tools:layout="@layout/fragment_camera" >
         <action
@@ -232,21 +247,9 @@
     </fragment>
     <fragment
         android:id="@+id/resultFragment"
-        android:name="com.bangkit.wastify.ui.screens.identify.ResultFragment"
+        android:name="com.bangkit.wastify.ui.views.identify.result.ResultFragment"
         android:label="fragment_result"
         tools:layout="@layout/fragment_result">
-
-        <argument
-            android:name="imageFile"
-            app:argType="java.io.File" />
-        <argument
-            android:name="isBackCamera"
-            app:argType="integer"
-            android:defaultValue="0" />
-        <argument
-            android:name="imageUri"
-            app:argType="android.net.Uri"
-            app:nullable="true" />
         <action
             android:id="@+id/action_resultFragment_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -271,10 +274,16 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <argument
+            android:name="result"
+            app:argType="com.bangkit.wastify.data.model.Result" />
+        <argument
+            android:name="isDetail"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.bangkit.wastify.ui.screens.settings.EditProfileFragment"
+        android:name="com.bangkit.wastify.ui.views.settings.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile" >
         <action
@@ -287,7 +296,7 @@
     </fragment>
     <fragment
         android:id="@+id/typeDetailFragment"
-        android:name="com.bangkit.wastify.ui.screens.home.typedetail.TypeDetailFragment"
+        android:name="com.bangkit.wastify.ui.views.home.typedetail.TypeDetailFragment"
         android:label="fragment_type_detail"
         tools:layout="@layout/fragment_type_detail" >
         <argument

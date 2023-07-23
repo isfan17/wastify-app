@@ -3,33 +3,43 @@ package com.bangkit.wastify.data.repositories.main
 import com.bangkit.wastify.data.db.dao.ArticleDao
 import com.bangkit.wastify.data.db.dao.CategoryDao
 import com.bangkit.wastify.data.db.dao.DisposalMethodDao
+import com.bangkit.wastify.data.db.dao.ResultDao
 import com.bangkit.wastify.data.db.dao.TypeDao
 import com.bangkit.wastify.data.db.entities.asDomainModel
+import com.bangkit.wastify.data.model.Article
+import com.bangkit.wastify.data.model.asEntityModel
 import com.bangkit.wastify.data.network.FirebaseArticle
 import com.bangkit.wastify.data.network.FirebaseCategory
 import com.bangkit.wastify.data.network.FirebaseDisposalMethod
+import com.bangkit.wastify.data.network.FirebaseResult
 import com.bangkit.wastify.data.network.FirebaseType
 import com.bangkit.wastify.data.network.asEntityModel
 import com.bangkit.wastify.utils.UiState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
 
 class MainRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
+    private val dbReference: DatabaseReference,
     private val typeDao: TypeDao,
     private val categoryDao: CategoryDao,
     private val disposalMethodDao: DisposalMethodDao,
     private val articleDao: ArticleDao,
-    private val dbReference: DatabaseReference,
+    private val resultDao: ResultDao,
 ) : MainRepository {
 
-    override suspend fun getTypes() = typeDao.getTypes().map { it.asDomainModel() }
-    override suspend fun getCategories() = categoryDao.getCategories().map { it.asDomainModel() }
-    override suspend fun getArticles() = articleDao.getArticles().map { it.asDomainModel() }
+    override fun getTypes() = typeDao.getTypes().map { it.asDomainModel() }
+    override fun getCategories() = categoryDao.getCategories().map { it.asDomainModel() }
+    override fun getArticles() = articleDao.getArticles().map { it.asDomainModel() }
+    override fun getSavedArticles() = articleDao.getSavedArticles().map { it.asDomainModel() }
+    override fun getSavedResults() = resultDao.getResults().map { it.asDomainModel() }
+
 
     override suspend fun getType(id: String) = typeDao.getTypeAndCategories(id)
     override suspend fun getCategory(id: String) = categoryDao.getCategoryAndMethods(id)
@@ -135,5 +145,37 @@ class MainRepositoryImpl @Inject constructor(
             Timber.e(e)
             UiState.Failure(e.message)
         }
+    }
+
+    override suspend fun fetchResults(): UiState<String> {
+        return try {
+            val localResults = resultDao.getResults().take(1).single()
+            if (localResults.isEmpty()) {
+                // Fetch saved results data from firebase realtime db
+                val resultsSnapshot =
+                    firebaseAuth.currentUser?.let { dbReference.child("saved_results").child(it.uid).get().await() }
+                val networkResults = mutableListOf<FirebaseResult>()
+                if (resultsSnapshot != null) {
+                    for (snapshot in resultsSnapshot.children) {
+                        val networkResult = snapshot.getValue(FirebaseResult::class.java)
+                        networkResult?.let {
+                            networkResults.add(it)
+                        }
+                    }
+                }
+
+                // Insert fetched saved results into the local Room database
+                resultDao.insertResults(networkResults.asEntityModel())
+            }
+            UiState.Success("Saved results fetched successfully")
+        } catch (e: Exception) {
+            Timber.e(e)
+            UiState.Failure(e.message)
+        }
+    }
+
+    override suspend fun setArticleBookmark(article: Article, bookmarkState: Boolean) {
+        article.isBookmarked = bookmarkState
+        articleDao.updateArticle(article.asEntityModel())
     }
 }

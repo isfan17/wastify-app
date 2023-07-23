@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
+    suspend fun login(email: String, password: String): UiState<User>
+    suspend fun register(name: String, email: String, password: String): UiState<User>
+    suspend fun logout(): UiState<String>
+
     fun getUser(): Flow<User?>
     suspend fun updateProfile(name: String, email: String, img: Bitmap?): UiState<String>
-
-    suspend fun getSavedResults(): Flow<UiState<List<Result>>>
-
-    suspend fun getSavedArticles(): Flow<List<Article>>
-    suspend fun setArticleBookmark(article: Article, bookmarkState: Boolean)
+    suspend fun forgotPassword(email: String): UiState<String>
 }

@@ -1,8 +1,6 @@
 package com.bangkit.wastify.di
 
 import android.content.Context
-import com.bangkit.wastify.data.repositories.auth.AuthRepository
-import com.bangkit.wastify.data.repositories.auth.AuthRepositoryImpl
 import com.bangkit.wastify.data.repositories.identify.IdentifyRepository
 import com.bangkit.wastify.data.repositories.identify.IdentifyRepositoryImpl
 import com.bangkit.wastify.data.repositories.main.MainRepository
@@ -20,10 +18,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class RepositoryModule {
-
-    @Provides
-    @Singleton
-    fun provideAuthRepository(impl: AuthRepositoryImpl): AuthRepository = impl
 
     @Provides
     @Singleton

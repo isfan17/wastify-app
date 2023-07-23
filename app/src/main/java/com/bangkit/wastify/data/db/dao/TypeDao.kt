@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.bangkit.wastify.data.db.entities.TypeEntity
-import com.bangkit.wastify.data.model.Type
 import com.bangkit.wastify.data.model.TypeAndCategories
 import kotlinx.coroutines.flow.Flow
 

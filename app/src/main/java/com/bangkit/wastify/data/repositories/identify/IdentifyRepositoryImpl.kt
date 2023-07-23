@@ -3,107 +3,33 @@ package com.bangkit.wastify.data.repositories.identify
 import android.graphics.Bitmap
 import android.media.ThumbnailUtils
 import com.bangkit.wastify.data.db.dao.ResultDao
-import com.bangkit.wastify.data.db.entities.asDomainModel
-import com.bangkit.wastify.data.model.Identification
+import com.bangkit.wastify.data.model.Classification
 import com.bangkit.wastify.data.model.Result
-import com.bangkit.wastify.data.network.FirebaseResult
-import com.bangkit.wastify.data.network.asDomainModel
-import com.bangkit.wastify.data.network.asEntityModel
+import com.bangkit.wastify.data.model.asEntityModel
 import com.bangkit.wastify.ml.WastifyModel
-import com.bangkit.wastify.utils.Helper
+import com.bangkit.wastify.utils.Helper.getCurrentFormattedDate
 import com.bangkit.wastify.utils.UiState
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.tasks.await
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import timber.log.Timber
-import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import javax.inject.Inject
 
 class IdentifyRepositoryImpl @Inject constructor(
-    private val resultDao: ResultDao,
     private val model: WastifyModel,
-    private val firebaseAuth: FirebaseAuth,
-    private val firebaseStorage: FirebaseStorage,
-    private val dbReference: DatabaseReference
-) : IdentifyRepository {
+    private val resultDao: ResultDao,
+): IdentifyRepository {
 
-    override suspend fun getResults(): Flow<UiState<List<Result>>> = flow {
-        emit(UiState.Loading)
-        try {
-            // Fetch data from firebase realtime db
-            val dataSnapshot = firebaseAuth.currentUser?.let { dbReference.child("results").child(it.uid).get().await() }
-            val networkResults = mutableListOf<FirebaseResult>()
-            if (dataSnapshot != null) {
-                for (snapshot in dataSnapshot.children) {
-                    val networkResult = snapshot.getValue(FirebaseResult::class.java)
-                    networkResult?.let { networkResults.add(it) }
-                }
-            }
+    override suspend fun storeResult(result: Result) = resultDao.insertResult(result.asEntityModel())
 
-            // Insert fetched data into the local Room database
-            resultDao.clearResults()
-            resultDao.insertResults(networkResults.asEntityModel())
-
-            // Emit the fetched data as a Success
-            emit(UiState.Success(networkResults.asDomainModel()))
-        } catch (e: Exception) { Timber.e(e) }
-
-        val localData = resultDao.getResults().map { UiState.Success(it.asDomainModel()) }
-        emitAll(localData)
-    }.catch { e ->
-        emit(UiState.Failure(e.message))
+    override suspend fun deleteResult(result: Result) {
+        val resultEntity = result.asEntityModel()
+        resultEntity.id = result.id!!
+        resultDao.deleteResult(resultEntity)
     }
 
-    override suspend fun storeResult(identification: Identification): UiState<String> {
-        return try {
-            firebaseAuth.currentUser?.let {  firebaseUser ->
-                // Store bitmap in storage
-                val storageRef = firebaseStorage.reference.child("results_img/${firebaseUser.uid}/${System.currentTimeMillis()}")
-                val outputStream = ByteArrayOutputStream()
-                identification.image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                val compressedImg = outputStream.toByteArray()
-
-                val objResult = FirebaseResult(
-                    name = identification.result,
-                    percentage = identification.percentage,
-                    typeId = identification.typeId,
-                    categoryId = identification.categoryId,
-                    recyclable = identification.recyclable,
-                    createdAt = Helper.getCurrentFormattedDate()
-                )
-
-                val uploadTask = storageRef.putBytes(compressedImg)
-                val uploadResult = uploadTask.await()
-
-                if (uploadResult.task.isSuccessful) {
-                    val downloadUrl = storageRef.downloadUrl.await()
-                    objResult.imageUrl = downloadUrl.toString()
-                } else {
-                    Timber.d("Failed to store image")
-                }
-
-                val resultRef = dbReference.child("results")
-                val resultId = resultRef.child(firebaseUser.uid).push().key
-                if (resultId != null) { resultRef.child(firebaseUser.uid).child(resultId).setValue(objResult) }
-            }
-            UiState.Success("Result saved successfully")
-        } catch (e: Exception) {
-            Timber.e(e)
-            UiState.Failure(e.message)
-        }
-    }
-
-    override suspend fun classifyWaste(image: Bitmap): UiState<Identification> {
+    override suspend fun identifyWaste(image: Bitmap): UiState<Result> {
         return try {
             val imageSize = 320
 
@@ -137,60 +63,78 @@ class IdentifyRepositoryImpl @Inject constructor(
             val outputFeature0 = outputs.outputFeature0AsTensorBuffer
 
             val confidences = outputFeature0.floatArray
-            // find the index of the class with the biggest confidence.
-            var maxPos = 0
-            var maxConfidence = 0f
-            for (i in confidences.indices) {
-                if (confidences[i] > maxConfidence) {
-                    maxConfidence = confidences[i]
-                    maxPos = i
-                }
-            }
+            val result = generateIdentification(scaledImg, confidences)
 
-            val result = generateResult(scaledImg, maxPos, maxConfidence.toDouble())
             UiState.Success(result)
         } catch (e: Exception) {
             UiState.Failure(e.message)
         }
     }
 
-    private fun generateResult(
+    private fun generateIdentification(
         img: Bitmap,
-        maxPos: Int,
-        maxConfidence: Double
-    ): Identification {
-        // Result
-        val classes = arrayOf("battery", "biological", "brown-glass", "cardboard", "clothes", "green-glass", "metal", "paper", "plastic", "shoes", "trash", "white-glass")
-        val result = classes[maxPos]
+        confidences: FloatArray,
+    ): Result {
 
-        val categoryId = when(maxPos) {
-            0 -> "c2"
-            1 -> "c1"
-            2, 5, 11 -> "c6"
-            3 -> "c4"
-            4 -> "c5"
-            6 -> "c3"
-            7 -> "c7"
-            8 -> "c8"
-            9 -> "c5"
-            10 -> "c5"
-            else -> "c2"
+        // Classes name from model
+        val classes = arrayOf(
+            "Battery", // 0
+            "Biological", // 1
+            "Brown Glass", // 2
+            "Cardboard", // 3
+            "Clothes", // 4
+            "Green Glass", // 5
+            "Metal", // 6
+            "Paper", // 7
+            "Plastic", // 8
+            "Shoes", // 9
+            "Trash", // 10
+            "White Glass" // 11
+        )
+
+        // Classifications to match each percentage to each model classes
+        val classifications = mutableListOf<Classification>()
+        for (i in confidences.indices) {
+            val classification = Classification(
+                name = classes[i],
+                percentage = confidences[i].toDouble(),
+            )
+            classifications.add(classification)
+        }
+        classifications.sortByDescending { it.percentage }
+
+        // Generate the categoryId, typeId, and recyclable based on the highest percentage classification (first item)
+        val categoryId = when(classifications[0].name) {
+            "Biological" -> "c1"
+            "Battery" -> "c2"
+            "Metal" -> "c3"
+            "Cardboard" -> "c4"
+            "Clothes", "Shoes", "Trash" -> "c5"
+            "Brown Glass", "Green Glass", "White Glass" -> "c6"
+            "Paper" -> "c7"
+            "Plastic" -> "c8"
+            else -> "c1"
         }
         val typeId = when(categoryId) {
-            "c2" -> "t3"
-            "c3", "c6", "c8" -> "t2"
-            "c4", "c7"-> "t4"
             "c1"-> "t1"
+            "c3", "c6", "c8" -> "t2"
+            "c2" -> "t3"
+            "c4", "c7"-> "t4"
             "c5" -> "t5"
-            else -> "5"
+            else -> "t5"
         }
         val recyclable = when(categoryId) {
             "c1", "c5", "c2" -> false
             else -> true
         }
 
-        return Identification(
-            img, result, maxConfidence, typeId, categoryId, recyclable
+        return Result(
+            image = img,
+            classifications = classifications,
+            typeId = typeId,
+            categoryId = categoryId,
+            recyclable = recyclable,
+            createdAt = getCurrentFormattedDate()
         )
     }
 }

@@ -5,9 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bangkit.wastify.data.model.Result
 import com.bangkit.wastify.databinding.ItemResultBinding
-import com.bumptech.glide.Glide
+import com.bangkit.wastify.data.model.Result
 
 class ResultGridAdapter(
     val onItemClicked: (Result) -> Unit
@@ -26,10 +25,8 @@ class ResultGridAdapter(
         : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(data: Result) {
-            Glide.with(itemView)
-                .load(data.imageUrl)
-                .into(binding.ivResult)
-            binding.tvResult.text = data.name
+            binding.ivResult.setImageBitmap(data.image)
+            binding.tvResult.text = data.classifications[0].name
             binding.tvDate.text = data.createdAt
             binding.root.setOnClickListener { onItemClicked.invoke(data) }
         }
@@ -37,7 +34,7 @@ class ResultGridAdapter(
 
     class DiffCallback: DiffUtil.ItemCallback<Result>() {
         override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
-            return oldItem.imageUrl == newItem.imageUrl
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {

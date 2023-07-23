@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screens.bookmarks.SavedResultsFragment">
+    tools:context=".ui.views.bookmarks.SavedResultsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_results"
@@ -37,9 +37,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/no_waste_identifications"
+        android:text="@string/msg_no_saved_results"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="24sp"
@@ -57,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/msg_start_identify"
+        android:text="@string/msg_save_result"
         android:textAlignment="center"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

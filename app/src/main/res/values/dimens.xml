@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="type_item_offset">4dp</dimen>
+    <dimen name="type_item_offset">2dp</dimen>
     <dimen name="category_item_offset">12dp</dimen>
+    <dimen name="result_item_offset">8dp</dimen>
 </resources>

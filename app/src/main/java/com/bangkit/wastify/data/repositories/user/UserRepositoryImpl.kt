@@ -3,18 +3,22 @@ package com.bangkit.wastify.data.repositories.user
 import android.graphics.Bitmap
 import android.net.Uri
 import com.bangkit.wastify.data.db.dao.ArticleDao
+import com.bangkit.wastify.data.db.dao.ResultDao
 import com.bangkit.wastify.data.db.dao.UserDao
 import com.bangkit.wastify.data.db.entities.asDomainModel
-import com.bangkit.wastify.data.model.Article
-import com.bangkit.wastify.data.model.Result
+import com.bangkit.wastify.data.db.entities.asNetworkModel
 import com.bangkit.wastify.data.model.User
 import com.bangkit.wastify.data.model.asEntityModel
 import com.bangkit.wastify.utils.UiState
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
@@ -23,19 +27,68 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseStorage: FirebaseStorage,
+    private val dbReference: DatabaseReference,
     private val userDao: UserDao,
+    private val resultDao: ResultDao,
     private val articleDao: ArticleDao,
 ) : UserRepository {
 
-    override suspend fun getSavedResults(): Flow<UiState<List<Result>>> {
-        TODO("Not yet implemented")
+    override suspend fun login(
+        email: String,
+        password: String
+    ): UiState<User> {
+        return try {
+            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            val imageUrl = getUserImageUrl(result.user!!.uid)
+
+            val objUser = User(
+                id = result.user!!.uid,
+                name = result.user!!.displayName!!,
+                email = result.user!!.email!!,
+                imageUrl = imageUrl
+            )
+
+            userDao.insertUser(objUser.asEntityModel())
+            UiState.Success(objUser)
+        } catch (e: Exception) {
+            UiState.Failure(e.message)
+        }
     }
 
-    override suspend fun getSavedArticles() = articleDao.getSavedArticles().map { it.asDomainModel() }
+    override suspend fun register(
+        name: String,
+        email: String,
+        password: String
+    ): UiState<User> {
+        return try {
+            val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            result?.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())?.await()
 
-    override suspend fun setArticleBookmark(article: Article, bookmarkState: Boolean) {
-        article.isBookmarked = bookmarkState
-        articleDao.updateArticle(article.asEntityModel())
+            val objUser = User(
+                id = result.user!!.uid,
+                name = result.user!!.displayName!!,
+                email = result.user!!.email!!
+            )
+            userDao.insertUser(objUser.asEntityModel())
+            UiState.Success(objUser)
+        } catch (e: Exception) {
+            UiState.Failure(e.message)
+        }
+    }
+
+    override suspend fun logout(): UiState<String> {
+        return try {
+            // Delete user related data and save it in firebase realtime db
+            manageUserRelatedData()
+
+            // Clear user and auth data
+            userDao.deleteUser()
+            firebaseAuth.signOut()
+
+            UiState.Success("Logout Successful")
+        } catch (e: Exception) {
+            UiState.Failure(e.message)
+        }
     }
 
     override fun getUser(): Flow<User?> {
@@ -90,14 +143,48 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun forgotPassword(email: String): UiState<String> {
+        return try {
+            firebaseAuth.sendPasswordResetEmail(email).await()
+            UiState.Success("Email has been sent")
+        } catch (e: Exception) {
+            UiState.Failure(e.message)
+        }
+    }
+
     private suspend fun getUserImageUrl(id: String): String? {
         val imgRef = firebaseStorage.reference.child("user_img/$id/")
 
         return try {
             val downloadUrl: Uri = imgRef.downloadUrl.await()
             downloadUrl.toString()
-        } catch (e: Exception) {
-            null
+        } catch (e: Exception) { null }
+    }
+
+    private suspend fun manageUserRelatedData() {
+        firebaseAuth.currentUser?.let {  firebaseUser ->
+            // Store user saved articles data in firebase realtime db
+            val savedArticlesRef = dbReference.child("saved_articles").child(firebaseUser.uid)
+            savedArticlesRef.removeValue()
+            val savedArticlesMap = HashMap<String, Boolean>()
+            val savedArticles = articleDao.getSavedArticles().take(1).single()
+            for (article in savedArticles) {
+                savedArticlesMap[article.id] = true
+            }
+            savedArticlesRef.setValue(savedArticlesMap)
+
+            // Clear articles data in local db
+            articleDao.clearArticles()
+
+            // Store user saved results data in firebase realtime db
+            val savedResultsRef = dbReference.child("saved_results").child(firebaseUser.uid)
+            savedResultsRef.removeValue()
+            val results = resultDao.getResults().take(1).single()
+            val networkResults = results.asNetworkModel()
+            savedResultsRef.setValue(networkResults)
+
+            // Clear results data in local db
+            resultDao.clearResults()
         }
     }
 }
